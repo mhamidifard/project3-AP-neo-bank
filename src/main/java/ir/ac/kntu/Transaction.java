@@ -1,2 +1,4 @@
-package ir.ac.kntu;public class Transaction {
+package ir.ac.kntu;
+
+public abstract class Transaction {
 }

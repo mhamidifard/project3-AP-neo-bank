@@ -1,2 +1,4 @@
-package ir.ac.kntu;public class Card {
+package ir.ac.kntu;
+
+public class Card {
 }

@@ -1,2 +1,5 @@
-package ir.ac.kntu;public class VerificationRequest {
+package ir.ac.kntu;
+
+public class VerificationRequest {
+
 }

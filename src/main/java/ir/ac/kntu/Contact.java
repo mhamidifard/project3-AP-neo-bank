@@ -1,2 +1,5 @@
-package ir.ac.kntu;public class Contacts {
+package ir.ac.kntu;
+
+public class Contact {
+
 }
