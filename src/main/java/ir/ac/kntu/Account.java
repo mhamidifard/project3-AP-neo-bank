@@ -1,5 +1,7 @@
 package ir.ac.kntu;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -14,8 +16,9 @@ public class Account {
     private String id;
     private long accountNumber=0;
     private Card card;
-    private List<Transaction> transactions;
-    private Map<Long,Contact> contactMap;
+    private List<Transaction> transactions=new ArrayList<>();
+    private Map<Long,Contact> contactMap=new HashMap<>();
+
 
     public Account(String firstName, String lastName, long phoneNumber, String id, String password) {
         setFirstName(firstName);
@@ -27,6 +30,15 @@ public class Account {
 
     public void verify(){
         setverificationStatus(true);
+    }
+
+    public boolean addContact(String firstName, String lastName, long phoneNumber){
+        if(contactMap.containsKey(phoneNumber)){
+            return false;
+        }else {
+            contactMap.put(phoneNumber,new Contact(firstName, lastName, phoneNumber));
+            return true;
+        }
     }
 
 
