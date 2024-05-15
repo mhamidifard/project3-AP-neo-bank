@@ -31,16 +31,16 @@ public class Input {
         }
     }
     public static boolean isNumber(String temp){
-        Pattern p1=Pattern.compile("\\d+");
-        Matcher m1=p1.matcher(temp);
-        if (m1.matches()){
+        Pattern pNumber=Pattern.compile("\\d+");
+        Matcher mNumber=pNumber.matcher(temp);
+        if (mNumber.matches()){
             return true;
         }
         return false;
     }
 
     public static void printBottom(){
-        System.out.println("@:back  #quit:quit\n");
+        System.out.println("@:back  #quit:quit");
     }
     public static void userType(){
         int choice=-1;
@@ -68,6 +68,7 @@ public class Input {
         }
 
     }
+
     public static void goUser(){
         int choice=-1;
         String temp;
@@ -80,7 +81,7 @@ public class Input {
                 choice = Integer.parseInt(temp);
                 switch (choice) {
                     case 1:
-
+                        login();
                         return;
                     case 2:
                         return;
@@ -91,10 +92,67 @@ public class Input {
                 }
             } else if (command==Command.BACK) {
                 userType();
+                return;
             } else {
                 System.out.println("invalid input");
             }
         }
+
+    }
+
+    public static void login(){
+        Account account=null;
+        String temp,password="";
+        Command command;
+        boolean loop=true;
+        long phoneNumber=0;
+        while (phoneNumber==0) {
+            System.out.println("Enter phone number:");
+            temp = in.nextLine();
+            command = checkLine(temp);
+            if (command == Command.NOTHING && isNumber(temp)) {
+                phoneNumber = Long.parseLong(temp);
+                account=DataBase.findByPhone(phoneNumber);
+                if (account==null){
+                    phoneNumber=0;
+                    System.out.println("Wrong phoneNumber");
+                }
+
+            } else if (command == Command.BACK) {
+                goUser();
+                return;
+
+            } else {
+                System.out.println("invalid input");
+            }
+        }
+
+        while (loop) {
+            System.out.println("Enter password:");
+            temp = in.nextLine();
+            command = checkLine(temp);
+            if (command == Command.NOTHING ) {
+                password=temp;
+                System.out.printf("(%s)\n", password);
+
+            } else if (command == Command.BACK) {
+                goUser();
+                return;
+
+            } else {
+                System.out.println("invalid input");
+            }
+             if (account.passwordEqual(password)) {
+                loop=false;
+                System.out.println("Login successfully");
+                userAccount(account);
+                return;
+            }else {
+                System.out.println("Wrong password");
+            }
+        }
+    }
+    public static void userAccount(Account account){
 
     }
 

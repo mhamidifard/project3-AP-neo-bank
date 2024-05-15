@@ -10,18 +10,18 @@ public class DataBase {
     private static Map<Integer,Transaction> transactions=new HashMap<>();
 
     public static Account findByAccNum(long accNum){
-        for (int i = 0; i < accounts.size(); i++) {
-            if(accounts.get(i).getAccountNumber()==accNum){
-                return accounts.get(i);
+        for (Account user :accounts) {
+            if(user.getAccountNumber()==accNum){
+                return user;
             }
         }
         return null;
     }
 
     public static Account findByPhone(long phone){
-        for (int i = 0; i < accounts.size(); i++) {
-            if(accounts.get(i).getPhoneNumber()==phone){
-                return accounts.get(i);
+        for (Account user :accounts) {
+            if(user.getPhoneNumber()==phone){
+                return user;
             }
         }
         return null;

@@ -1,6 +1,5 @@
 package ir.ac.kntu;
 
-import com.sun.jdi.Value;
 import ir.ac.kntu.util.Calendar;
 
 import java.time.Instant;
@@ -13,12 +12,12 @@ public abstract class Transaction {
     double value;
     Instant date;
     TraType type;
-    long id;
+    long navId;
     public Transaction(double value, TraType type){
         setDate(Calendar.now());
         setType(type);
         setValue(value);
-        setId(createId());
+        setNavId(createId());
 
     }
 
@@ -45,12 +44,12 @@ public abstract class Transaction {
         this.type = type;
     }
 
-    public long getId() {
-        return id;
+    public long getNavId() {
+        return navId;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public void setNavId(long navId) {
+        this.navId = navId;
     }
 
     public double getValue() {

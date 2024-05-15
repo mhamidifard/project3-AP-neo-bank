@@ -6,14 +6,14 @@ import java.util.List;
 import java.util.Map;
 
 public class Account {
-    private boolean verificationStatus=false;
+    private boolean verifyStatus =false;
     private boolean contactFeature =true;
     private double balance=0;
     private long phoneNumber;
     private String firstName;
     private String lastName;
     private int passwordHash;
-    private String id;
+    private String nationalId;
     private long accountNumber=0;
     private Card card;
     private List<Transaction> transactions=new ArrayList<>();
@@ -24,12 +24,12 @@ public class Account {
         setFirstName(firstName);
         setLastName(lastName);
         setPhoneNumber(phoneNumber);
-        setId(id);
+        setNationalId(id);
         setPasswordHash(password);
     }
 
     public void verify(){
-        setverificationStatus(true);
+        setverifyStatus(true);
     }
 
     public boolean addContact(String firstName, String lastName, long phoneNumber){
@@ -39,6 +39,13 @@ public class Account {
             contactMap.put(phoneNumber,new Contact(firstName, lastName, phoneNumber));
             return true;
         }
+    }
+    public boolean passwordEqual(String password){
+        if(password.hashCode()==getPasswordHash()) {
+            return true;
+        }
+        return false;
+
     }
 
 
@@ -82,12 +89,12 @@ public class Account {
         this.passwordHash = password.hashCode();
     }
 
-    public String getId() {
-        return id;
+    public String getNationalId() {
+        return nationalId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setNationalId(String nationalId) {
+        this.nationalId = nationalId;
     }
 
     public long getAccountNumber() {
@@ -98,12 +105,12 @@ public class Account {
         this.accountNumber = accountNumber;
     }
 
-    public boolean isverificationStatus() {
-        return verificationStatus;
+    public boolean isverifyStatus() {
+        return verifyStatus;
     }
 
-    public void setverificationStatus(boolean verificationStatus) {
-        this.verificationStatus = verificationStatus;
+    public void setverifyStatus(boolean verificationStatus) {
+        this.verifyStatus = verificationStatus;
     }
 
     public Card getCard() {
