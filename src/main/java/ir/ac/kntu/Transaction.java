@@ -13,7 +13,7 @@ public abstract class Transaction {
     double value;
     Instant date;
     TraType type;
-    int id;
+    long id;
     public Transaction(double value, TraType type){
         setDate(Calendar.now());
         setType(type);
@@ -22,7 +22,7 @@ public abstract class Transaction {
 
     }
 
-    private int createId(){
+    private long createId(){
         return 12300000+DataBase.getTransactions().size();
     }
 
@@ -45,11 +45,11 @@ public abstract class Transaction {
         this.type = type;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

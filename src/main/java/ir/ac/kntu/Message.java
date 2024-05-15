@@ -1,2 +1,4 @@
-package ir.ac.kntu;public class Message {
+package ir.ac.kntu;
+
+public class Message {
 }

@@ -1,2 +1,4 @@
-package ir.ac.kntu;public class support {
+package ir.ac.kntu;
+
+public class support {
 }
