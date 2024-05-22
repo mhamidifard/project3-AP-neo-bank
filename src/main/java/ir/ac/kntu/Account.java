@@ -6,8 +6,10 @@ import java.util.List;
 import java.util.Map;
 
 public class Account {
+    private boolean supportChecked=false;
     private boolean verifyStatus =false;
     private boolean contactFeature =true;
+    private int dataBaseNum;
     private double balance=0;
     private long phoneNumber;
     private String firstName;
@@ -29,7 +31,7 @@ public class Account {
     }
 
     public void verify(){
-        setverifyStatus(true);
+        setVerifyStatus(true);
     }
 
     public boolean addContact(String firstName, String lastName, long phoneNumber){
@@ -47,6 +49,12 @@ public class Account {
         return false;
 
     }
+
+    public  void sendVerifyReq(){
+        DataBase.addVerifyReq(phoneNumber);
+    }
+
+
 
 
 
@@ -105,13 +113,6 @@ public class Account {
         this.accountNumber = accountNumber;
     }
 
-    public boolean isverifyStatus() {
-        return verifyStatus;
-    }
-
-    public void setverifyStatus(boolean verificationStatus) {
-        this.verifyStatus = verificationStatus;
-    }
 
     public Card getCard() {
         return card;
@@ -151,5 +152,29 @@ public class Account {
 
     public void setBalance(double balance) {
         this.balance = balance;
+    }
+
+    public boolean isVerifyStatus() {
+        return verifyStatus;
+    }
+
+    public void setVerifyStatus(boolean verifyStatus) {
+        this.verifyStatus = verifyStatus;
+    }
+
+    public int getDataBaseNum() {
+        return dataBaseNum;
+    }
+
+    public void setDataBaseNum(int dataBaseNum) {
+        this.dataBaseNum = dataBaseNum;
+    }
+
+    public boolean isSupportChecked() {
+        return supportChecked;
+    }
+
+    public void setSupportChecked(boolean supportChecked) {
+        this.supportChecked = supportChecked;
     }
 }

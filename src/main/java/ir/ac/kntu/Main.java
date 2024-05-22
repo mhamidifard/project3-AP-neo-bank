@@ -16,6 +16,7 @@ public class Main {
         long maxNumber=912;
         Account a=new Account("max","vestapen", maxNumber,"1593574562","12354w");
         DataBase.getAccounts().add(a);
+        DataBase.addSupport("mohammad","admin12","1382*");
 //        DataBase.getAccounts().add(new Account("mohammad","hamidi",9335236598L,"3265987412","1234"));
 //        a.addContact("mohammad","hamidi",9335236598L);
 //        System.out.println(a.getContactMap().values().toString());
