@@ -23,11 +23,12 @@ public class UserInput {
                 choice=Integer.parseInt(temp);
                 switch (choice){
                     case 1:
-                        break;
+                        return;
 
                     default:
                         choice=0;
                         System.out.println("invalid choice");
+                        break;
                 }
             }
         }

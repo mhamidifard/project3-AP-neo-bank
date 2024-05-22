@@ -18,6 +18,7 @@ public class SupportInput {
             if(Input.checkLine(temp)==Command.BACK){
                 Input.goSupport();
                 choice=-1;
+                return;
             } else if (!Input.isNumber(temp)) {
                 System.out.println("invalid choice");
             }else{
@@ -25,10 +26,11 @@ public class SupportInput {
                 switch (choice){
                     case 1:
                         verifylist();
-
+                        return;
                     default:
                         choice=0;
                         System.out.println("invalid choice");
+                        break;
                 }
             }
         }
@@ -70,7 +72,7 @@ public class SupportInput {
             Input.printBottom();
             temp=in.nextLine();
             if(Input.checkLine(temp)==Command.BACK){
-                //verifylist();
+                verifylist();
                 return;
             } else if (!Input.isNumber(temp)) {
                 System.out.println("invalid choice");
@@ -78,6 +80,8 @@ public class SupportInput {
                 choice=Integer.parseInt(temp);
                 if(choice==1){
                     verifyReq.accept();
+                    menu(support,in);
+                    return;
                 }
                 else if(choice==2){
                     System.out.println("Enter the message");
@@ -85,6 +89,8 @@ public class SupportInput {
                     temp=in.nextLine();
                     if(Input.checkLine(temp)==Command.BACK) {
                         checkVerify(verifyReq);
+                        verifyReq.accept();
+                        menu(support,in);
                         return;
                     }
                     verifyReq.reject(temp);

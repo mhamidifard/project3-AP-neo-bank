@@ -94,8 +94,10 @@ public class Input {
                 switch (choice) {
                     case 1:
                         goUser();
+                        break;
                     case 2:
                         goSupport();
+                        break;
                     default:
                         choice = -1;
                         System.out.println("invalid choise");
@@ -109,9 +111,9 @@ public class Input {
     }
 
     public static void goUser() {
-        int choice = 0;
+        int choice = -1;
         String temp;
-        while (choice!=-1) {
+        while (choice==-1) {
             System.out.println("1.Login\n2.Register");
             printBottom();
             temp = in.nextLine();
@@ -121,16 +123,17 @@ public class Input {
                 switch (choice) {
                     case 1:
                         login();
+                        return;
                     case 2:
                         register();
-                    default:
-                        choice = -1;
-                        System.out.println("invalid choise");
                         return;
+                    default:
+                        choice=-1;
+                        System.out.println("invalid choise");
+                        break;
                 }
             } else if (command == Command.BACK) {
-                choice=-1;
-                //userType();
+                userType();
                 return;
             } else {
                 System.out.println("invalid input");
@@ -146,7 +149,7 @@ public class Input {
         boolean loop = true;
         long phoneNumber = 0;
         while (phoneNumber == 0) {
-            System.out.println("Enter phone number:");
+            System.out.println("user login\nEnter phone number:");
             temp = in.nextLine();
             command = checkLine(temp);
             if (command == Command.NOTHING && isNumber(temp)) {
@@ -158,7 +161,7 @@ public class Input {
                 }
 
             } else if (command == Command.BACK) {
-                //goUser();
+                goUser();
                 return;
 
             } else {
@@ -196,7 +199,7 @@ public class Input {
         String temp, nationalId = "", firstName = "", lastName = "", password = "";
         Command command;
         long phoneNumber = 0;
-
+        System.out.println("register");
         nationalId=defineId(null);
 
         phoneNumber=definePhone(null);
@@ -210,6 +213,7 @@ public class Input {
         DataBase.addUser(firstName, lastName, phoneNumber, nationalId, password);
         DataBase.addVerifyReq(phoneNumber);
         System.out.println("Register successfully");
+        userType();
     }
 
     public static void userAccount(Account account) {
@@ -326,7 +330,7 @@ public class Input {
         Command command;
         boolean loop = true;
         while (userName.isEmpty()) {
-            System.out.println("Enter username:");
+            System.out.println("support login\nEnter username:");
             temp = in.nextLine();
             command = checkLine(temp);
             if (command == Command.NOTHING ) {
@@ -338,7 +342,7 @@ public class Input {
                 }
 
             } else if (command == Command.BACK) {
-                //userType();
+                userType();
                 return;
 
             } else {
@@ -354,7 +358,7 @@ public class Input {
                 password = temp;
 
             } else if (command == Command.BACK) {
-                //userType();
+                userType();
                 return;
 
             } else {
@@ -372,22 +376,30 @@ public class Input {
     }
 
     public static void checkUserVr(Account account) {
-        if (account.isVerifyStatus()) {
+        boolean supportchecked=true;
 
-        } else if (!account.isSupportChecked()) {
+        VerificationRequest verifyReq=DataBase.findVerifyReq(account.getPhoneNumber());
+        if (verifyReq!=null) {
+            supportchecked=verifyReq.isSupportChecked();
+        }
+        if (account.isVerifyStatus()) {
+            System.out.println("hello menu");
+        } else if (!supportchecked) {
             String temp;
-            System.out.println(DataBase.findVerifyReq(account.getPhoneNumber()).getMessage());
+            System.out.println("hi");
+            System.out.println(verifyReq.getMessage());
             while (true){
                 Input.printBottom();
                 temp = in.nextLine();
                 if (Input.checkLine(temp) == Command.BACK) {
-                    //goUser();
+                    goUser();
                     return;
                 }else {
                     System.out.println("invalid choice");
                 }
             }
         } else {
+            System.out.println(verifyReq.getMessage());
             String temp;
             int choice = 0;
             while (choice == 0) {
@@ -395,7 +407,7 @@ public class Input {
                 Input.printBottom();
                 temp = in.nextLine();
                 if (Input.checkLine(temp) == Command.BACK) {
-                    //goUser();
+                    goUser();
                     return;
                 } else if (!Input.isNumber(temp)) {
                     System.out.println("invalid choice");
@@ -414,12 +426,11 @@ public class Input {
         }
     }
 
-
     public static void editRegister(Account account){
         String temp, nationalId = "", firstName = "", lastName = "", password = "";
         Command command;
         long phoneNumber = 0;
-
+        System.out.println("edit register");
         nationalId=defineId(null);
 
         phoneNumber=definePhone(null);
@@ -429,13 +440,15 @@ public class Input {
         lastName=defineLastName();
 
         password=definePassword();
+        long lastPhoneNumber= account.getPhoneNumber();
         account.setNationalId(nationalId);
         account.setPhoneNumber(phoneNumber);
         account.setFirstName(firstName);
         account.setLastName(lastName);
         account.setPasswordHash(password);
-        DataBase.renewVerifyReq(account.getPhoneNumber(),phoneNumber);
+        DataBase.renewVerifyReq(lastPhoneNumber,phoneNumber);
         System.out.println("edit register successfully");
+        userType();
     }
 
 }

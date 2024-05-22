@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 public class Account {
-    private boolean supportChecked=false;
     private boolean verifyStatus =false;
     private boolean contactFeature =true;
     private int dataBaseNum;
@@ -168,13 +167,5 @@ public class Account {
 
     public void setDataBaseNum(int dataBaseNum) {
         this.dataBaseNum = dataBaseNum;
-    }
-
-    public boolean isSupportChecked() {
-        return supportChecked;
-    }
-
-    public void setSupportChecked(boolean supportChecked) {
-        this.supportChecked = supportChecked;
     }
 }
