@@ -116,7 +116,7 @@ public class Input {
     public static void goUser() {
         int choice = -1;
         String temp;
-        while (choice == -1) {
+        while (true) {
             System.out.println("1.Login\n2.Register");
             printBottom();
             temp = syInput.nextLine();
@@ -126,17 +126,17 @@ public class Input {
                 switch (choice) {
                     case 1:
                         login();
-                        return;
+                        break;
                     case 2:
                         register();
-                        return;
+                        break;
                     default:
                         choice = -1;
                         System.out.println("invalid choise");
                         break;
                 }
             } else if (command == Command.BACK) {
-                userType();
+                //userType();
                 return;
             } else {
                 System.out.println("invalid input");
@@ -164,7 +164,7 @@ public class Input {
                 }
 
             } else if (command == Command.BACK) {
-                goUser();
+                //goUser();
                 return;
 
             } else {
@@ -180,7 +180,7 @@ public class Input {
                 password = temp;
 
             } else if (command == Command.BACK) {
-                goUser();
+                //goUser();
                 return;
 
             } else {
@@ -199,23 +199,34 @@ public class Input {
     }
 
     public static void register() {
-        String  nationalId = "", firstName = "", lastName = "", password = "";
+        String nationalId = "", firstName = "", lastName = "", password = "";
         long phoneNumber = 0;
         System.out.println("register");
         nationalId = defineId(null);
-
+        if(nationalId.equals("@")){
+            return;
+        }
         phoneNumber = definePhone(null);
-
+        if (phoneNumber == 0) {
+            return;
+        }
         firstName = defineFistName();
-
+        if (firstName.equals("@")) {
+            return;
+        }
         lastName = defineLastName();
-
+        if (lastName.equals("@")) {
+            return;
+        }
         password = definePassword();
+        if (password.equals("@")) {
+            return;
+        }
 
         DataBase.addUser(firstName, lastName, phoneNumber, nationalId, password);
         DataBase.addVerifyReq(phoneNumber);
         System.out.println("Register successfully");
-        userType();
+        //userType();
     }
 
     public static void userAccount(Account account) {
@@ -230,7 +241,7 @@ public class Input {
             temp = syInput.nextLine();
             command = checkLine(temp);
             if (command == Command.BACK) {
-                goUser();
+                return "@";
 
             } else if (!isNumber(temp)) {
                 System.out.println("invalid id");
@@ -253,7 +264,7 @@ public class Input {
             temp = syInput.nextLine();
             command = checkLine(temp);
             if (command == Command.BACK) {
-                goUser();
+                return 0;
 
             } else if (!isNumber(temp)) {
                 System.out.println("invalid phone number");
@@ -276,8 +287,7 @@ public class Input {
             command = checkLine(temp);
             temp = temp.strip().toLowerCase();
             if (command == Command.BACK) {
-                goUser();
-
+                return "@";
             } else if (!isLetter(temp)) {
                 System.out.println("invalid first name");
             } else {
@@ -296,7 +306,7 @@ public class Input {
             command = checkLine(temp);
             temp = temp.strip().toLowerCase();
             if (command == Command.BACK) {
-                goUser();
+                return "@";
 
             } else if (!isLetter(temp)) {
                 System.out.println("invalid last name");
@@ -315,7 +325,7 @@ public class Input {
             temp = syInput.nextLine();
             command = checkLine(temp);
             if (command == Command.BACK) {
-                goUser();
+                return "@";
 
             } else if (!isStrongPass(temp)) {
                 System.out.println("weak password");
@@ -344,7 +354,7 @@ public class Input {
                 }
 
             } else if (command == Command.BACK) {
-                userType();
+                //userType();
                 return;
 
             } else {
@@ -360,7 +370,7 @@ public class Input {
                 password = temp;
 
             } else if (command == Command.BACK) {
-                userType();
+                //userType();
                 return;
 
             } else {
@@ -387,6 +397,7 @@ public class Input {
         if (account.isVerifyStatus()) {
             System.out.println("hello menu");
             UserInput.menu(account, syInput);
+            return;
         } else if (!supportchecked) {
             String temp;
             System.out.println("hi");
@@ -395,7 +406,7 @@ public class Input {
                 Input.printBottom();
                 temp = syInput.nextLine();
                 if (Input.checkLine(temp) == Command.BACK) {
-                    goUser();
+                    //goUser();
                     return;
                 } else {
                     System.out.println("invalid choice");
@@ -410,7 +421,7 @@ public class Input {
                 Input.printBottom();
                 temp = syInput.nextLine();
                 if (Input.checkLine(temp) == Command.BACK) {
-                    goUser();
+                    //goUser();
                     return;
                 } else if (!Input.isNumber(temp)) {
                     System.out.println("invalid choice");
@@ -418,6 +429,7 @@ public class Input {
                     choice = Integer.parseInt(temp);
                     if (choice == 1) {
                         editRegister(account);
+                        return;
                     } else {
                         choice = 0;
                         System.out.println("invalid choice");
@@ -433,14 +445,25 @@ public class Input {
         long phoneNumber = 0;
         System.out.println("edit register");
         nationalId = defineId(account);
-
+        if (nationalId.equals("@")) {
+            return;
+        }
         phoneNumber = definePhone(account);
-
+        if (phoneNumber == 0) {
+            return;
+        }
         firstName = defineFistName();
-
+        if (firstName.equals("@")) {
+            return;
+        }
         lastName = defineLastName();
-
+        if (lastName.equals("@")) {
+            return;
+        }
         password = definePassword();
+        if (password.equals("@")) {
+            return;
+        }
         long lastPhoneNumber = account.getPhoneNumber();
         account.setNationalId(nationalId);
         account.setPhoneNumber(phoneNumber);
@@ -449,7 +472,7 @@ public class Input {
         account.setPasswordHash(password);
         DataBase.renewVerifyReq(lastPhoneNumber, phoneNumber);
         System.out.println("edit register successfully");
-        userType();
+        //userType();
     }
 
 }

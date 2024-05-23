@@ -11,12 +11,12 @@ public class UserInput {
         syInput = systemIn;
         String temp;
         int choice = 0;
-        while (choice != -1) {
+        while (true) {
             System.out.println("menu\n1.manage account\n2.contacts");
             Input.printBottom();
             temp = syInput.nextLine();
             if (Input.checkLine(temp) == Command.BACK) {
-                Input.goUser();
+                //Input.goUser();
                 choice = -1;
                 return;
             } else if (!Input.isNumber(temp)) {
@@ -26,10 +26,10 @@ public class UserInput {
                 switch (choice) {
                     case 1:
                         manageAccount();
-                        return;
+                        break;
                     case 2:
                         goContacts();
-                        return;
+                        break;
 
                     default:
                         choice = 0;
@@ -39,16 +39,17 @@ public class UserInput {
             }
         }
     }
+
     public static void manageAccount() {
         String temp;
         int choice = 0;
-        while (choice != -1) {
-            System.out.println("manage account\nbalance: "+account.getBalance());
+        while (true) {
+            System.out.println("manage account\nbalance: " + account.getBalance());
             System.out.println("1.charge\n2.transactions");
             Input.printBottom();
             temp = syInput.nextLine();
             if (Input.checkLine(temp) == Command.BACK) {
-                menu(account, syInput);
+                //menu(account, syInput);
                 choice = -1;
                 return;
             } else if (!Input.isNumber(temp)) {
@@ -58,10 +59,10 @@ public class UserInput {
                 switch (choice) {
                     case 1:
                         charge();
-                        return;
+                        break;
                     case 2:
 
-                        return;
+                        break;
 
                     default:
                         choice = 0;
@@ -71,6 +72,7 @@ public class UserInput {
             }
         }
     }
+
     public static void charge() {
         String temp;
         long amount = 0;
@@ -78,8 +80,7 @@ public class UserInput {
             System.out.println("Enter amount to be charged");
             temp = syInput.nextLine();
             if (Input.checkLine(temp) == Command.BACK) {
-                manageAccount();
-
+                //manageAccount();
                 return;
             } else if (!Input.isNumber(temp)) {
                 System.out.println("invalid amount");
@@ -92,19 +93,18 @@ public class UserInput {
                 }
             }
         }
-        manageAccount();
+        //manageAccount();
     }
 
-    public static void goContacts(){
+    public static void goContacts() {
         String temp;
         int choice = 0;
-        while (choice != -1) {
+        while (true) {
             System.out.println("contacts");
             System.out.println("1.add contact\n2.list contacts");
             Input.printBottom();
             temp = syInput.nextLine();
             if (Input.checkLine(temp) == Command.BACK) {
-                menu(account, syInput);
                 choice = -1;
                 return;
             } else if (!Input.isNumber(temp)) {
@@ -114,10 +114,10 @@ public class UserInput {
                 switch (choice) {
                     case 1:
                         addcontact();
-                        return;
+                        break;
                     case 2:
 
-                        return;
+                        break;
 
                     default:
                         choice = 0;
@@ -127,12 +127,19 @@ public class UserInput {
             }
         }
     }
+
     public static void addcontact() {
-        String firstName,lastName,temp;
+        String firstName, lastName, temp;
         Command command;
         System.out.println("add contact");
-        firstName=defContactFistName();
-        lastName=defContactLastName();
+        firstName = defContactFistName();
+        if (firstName.equals("@")) {
+            return;
+        }
+        lastName = defContactLastName();
+        if (lastName.equals("@")) {
+            return;
+        }
         long phoneNumber = 0;
         while (phoneNumber == 0) {
             System.out.println("Enter phone number:");
@@ -140,28 +147,29 @@ public class UserInput {
             command = Input.checkLine(temp);
             if (command == Command.NOTHING && Input.isNumber(temp)) {
                 phoneNumber = Long.parseLong(temp);
-                if (DataBase.findByPhone(phoneNumber)==null) {
+                if (DataBase.findByPhone(phoneNumber) == null) {
                     System.out.println("there is not this phone number ");
                     phoneNumber = 0;
                 } else if (account.containContact(phoneNumber)) {
                     System.out.println("contact already exists");
                     phoneNumber = 0;
-                }else {
+                } else {
                     account.addContact(firstName, lastName, phoneNumber);
                 }
 
             } else if (command == Command.BACK) {
-                goContacts();
+                //goContacts();
                 return;
 
             } else {
                 System.out.println("invalid input");
             }
         }
-        goContacts();
+        //goContacts();
 
 
     }
+
     public static String defContactFistName() {
         String temp, firstName = "";
         Command command;
@@ -171,7 +179,7 @@ public class UserInput {
             command = Input.checkLine(temp);
             temp = temp.strip().toLowerCase();
             if (command == Command.BACK) {
-                goContacts();
+                return "@";
             } else if (!Input.isLetter(temp)) {
                 System.out.println("invalid first name");
             } else {
@@ -180,6 +188,7 @@ public class UserInput {
         }
         return firstName;
     }
+
     public static String defContactLastName() {
         String temp, lastName = "";
         Command command;
@@ -189,7 +198,7 @@ public class UserInput {
             command = Input.checkLine(temp);
             temp = temp.strip().toLowerCase();
             if (command == Command.BACK) {
-                goContacts();
+                return "@";
             } else if (!Input.isLetter(temp)) {
                 System.out.println("invalid first name");
             } else {

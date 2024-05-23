@@ -12,12 +12,12 @@ public class SupportInput {
         String temp;
 
         int choice = 0;
-        while (choice != -1) {
+        while (true) {
             System.out.println("1.verify");
             Input.printBottom();
             temp = syinput.nextLine();
             if (Input.checkLine(temp) == Command.BACK) {
-                Input.goSupport();
+                //Input.goSupport();
                 choice = -1;
                 return;
             } else if (!Input.isNumber(temp)) {
@@ -27,7 +27,7 @@ public class SupportInput {
                 switch (choice) {
                     case 1:
                         verifylist();
-                        return;
+                        break;
                     default:
                         choice = 0;
                         System.out.println("invalid choice");
@@ -40,7 +40,7 @@ public class SupportInput {
     public static void verifylist() {
         String temp;
         int choice = 0;
-        while (choice == 0) {
+        while (true) {
             System.out.println("requests list");
             for (int i = 0; i < DataBase.getVerifyRequests().size(); i++) {
                 System.out.println(i + 1 + " : " + DataBase.getVerifyRequests().get(i).summery());
@@ -48,7 +48,7 @@ public class SupportInput {
             Input.printBottom();
             temp = syinput.nextLine();
             if (Input.checkLine(temp) == Command.BACK) {
-                menu(support,syinput);
+                //menu(support,syinput);
                 return;
             } else if (!Input.isNumber(temp)) {
                 System.out.println("invalid choice");
@@ -74,7 +74,7 @@ public class SupportInput {
             Input.printBottom();
             temp = syinput.nextLine();
             if (Input.checkLine(temp) == Command.BACK) {
-                verifylist();
+                //verifylist();
                 return;
             } else if (!Input.isNumber(temp)) {
                 System.out.println("invalid choice");
@@ -82,18 +82,18 @@ public class SupportInput {
                 choice = Integer.parseInt(temp);
                 if (choice == 1) {
                     verifyReq.accept();
-                    verifylist();
+                    //verifylist();
                     return;
                 } else if (choice == 2) {
                     System.out.println("Enter the message");
                     Input.printBottom();
                     temp = syinput.nextLine();
                     if (Input.checkLine(temp) == Command.BACK) {
-                        verifylist();
+                        //verifylist();
                         return;
                     }
                     verifyReq.reject(temp);
-                    verifylist();
+                    //verifylist();
                     return;
                 } else {
                     choice = 0;
