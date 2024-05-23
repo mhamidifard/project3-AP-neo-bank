@@ -33,13 +33,8 @@ public class Account {
         setVerifyStatus(true);
     }
 
-    public boolean addContact(String firstName, String lastName, long phoneNumber) {
-        if (contactMap.containsKey(phoneNumber)) {
-            return false;
-        } else {
-            contactMap.put(phoneNumber, new Contact(firstName, lastName, phoneNumber));
-            return true;
-        }
+    public void addContact(String firstName, String lastName, long phoneNumber) {
+        contactMap.put(phoneNumber, new Contact(firstName, lastName, phoneNumber));
     }
 
     public boolean passwordEqual(String password) {
@@ -49,6 +44,10 @@ public class Account {
 
     public void sendVerifyReq() {
         DataBase.addVerifyReq(phoneNumber);
+    }
+
+    public boolean containContact(long phoneNumber) {
+        return contactMap.containsKey(phoneNumber);
     }
 
 
