@@ -3,32 +3,33 @@ package ir.ac.kntu;
 import java.util.Scanner;
 
 public class SupportInput {
-    public static Scanner in;
+    private static Scanner syinput;
     private static Support support;
-    public static void menu(Support support1,Scanner systemIn){
-        support=support1;
-        in=systemIn;
+
+    public static void menu(Support support1, Scanner systemIn) {
+        support = support1;
+        syinput = systemIn;
         String temp;
 
-        int choice=0;
-        while (choice!=-1){
+        int choice = 0;
+        while (choice != -1) {
             System.out.println("1.verify");
             Input.printBottom();
-            temp=in.nextLine();
-            if(Input.checkLine(temp)==Command.BACK){
+            temp = syinput.nextLine();
+            if (Input.checkLine(temp) == Command.BACK) {
                 Input.goSupport();
-                choice=-1;
+                choice = -1;
                 return;
             } else if (!Input.isNumber(temp)) {
                 System.out.println("invalid choice");
-            }else{
-                choice=Integer.parseInt(temp);
-                switch (choice){
+            } else {
+                choice = Integer.parseInt(temp);
+                switch (choice) {
                     case 1:
                         verifylist();
                         return;
                     default:
-                        choice=0;
+                        choice = 0;
                         System.out.println("invalid choice");
                         break;
                 }
@@ -36,66 +37,66 @@ public class SupportInput {
         }
     }
 
-    public static void verifylist(){
+    public static void verifylist() {
         String temp;
-        int choice=0;
-        while (choice==0){
+        int choice = 0;
+        while (choice == 0) {
+            System.out.println("requests list");
             for (int i = 0; i < DataBase.getVerifyRequests().size(); i++) {
-                System.out.println(i+1+" : "+DataBase.getVerifyRequests().get(i).summery());
+                System.out.println(i + 1 + " : " + DataBase.getVerifyRequests().get(i).summery());
             }
             Input.printBottom();
-            temp=in.nextLine();
-            if(Input.checkLine(temp)==Command.BACK){
-                //menu(support,in);
+            temp = syinput.nextLine();
+            if (Input.checkLine(temp) == Command.BACK) {
+                menu(support,syinput);
                 return;
             } else if (!Input.isNumber(temp)) {
                 System.out.println("invalid choice");
-            }else{
-                choice=Integer.parseInt(temp);
-                if(0<choice && choice<=DataBase.getVerifyRequests().size()){
-                    checkVerify(DataBase.getVerifyRequests().get(choice-1));
-                }
-                else {
-                    choice=0;
+            } else {
+                choice = Integer.parseInt(temp);
+                if (0 < choice && choice <= DataBase.getVerifyRequests().size()) {
+                    checkVerify(DataBase.getVerifyRequests().get(choice - 1));
+                } else {
+                    choice = 0;
                     System.out.println("invalid choice");
                 }
             }
         }
     }
-    public static void checkVerify(VerificationRequest verifyReq){
+
+    public static void checkVerify(VerificationRequest verifyReq) {
 
         String temp;
-        int choice=0;
-        while (choice==0){
+        int choice = 0;
+        while (choice == 0) {
             System.out.println(verifyReq.toString());
             System.out.println("1.accept\n2.reject");
             Input.printBottom();
-            temp=in.nextLine();
-            if(Input.checkLine(temp)==Command.BACK){
+            temp = syinput.nextLine();
+            if (Input.checkLine(temp) == Command.BACK) {
                 verifylist();
                 return;
             } else if (!Input.isNumber(temp)) {
                 System.out.println("invalid choice");
-            }else{
-                choice=Integer.parseInt(temp);
-                if(choice==1){
+            } else {
+                choice = Integer.parseInt(temp);
+                if (choice == 1) {
                     verifyReq.accept();
-                    menu(support,in);
+                    verifylist();
                     return;
-                }
-                else if(choice==2){
+                } else if (choice == 2) {
                     System.out.println("Enter the message");
                     Input.printBottom();
-                    temp=in.nextLine();
-                    if(Input.checkLine(temp)==Command.BACK) {
-                        checkVerify(verifyReq);
-                        verifyReq.accept();
-                        menu(support,in);
+                    temp = syinput.nextLine();
+                    if (Input.checkLine(temp) == Command.BACK) {
+                        verifylist();
                         return;
                     }
                     verifyReq.reject(temp);
-                }else {
-                    choice=0;
+                    verifylist();
+                    return;
+                } else {
+                    choice = 0;
                     System.out.println("invalid choice");
                 }
             }

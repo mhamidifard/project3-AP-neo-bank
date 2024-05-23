@@ -47,6 +47,6 @@ public class Contact {
 
     @Override
     public String toString() {
-        return getFirstName()+" "+getLastName();
+        return getFirstName() + " " + getLastName();
     }
 }

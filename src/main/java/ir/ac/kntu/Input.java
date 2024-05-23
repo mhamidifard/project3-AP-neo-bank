@@ -9,10 +9,10 @@ enum Command {
 }
 
 public class Input {
-    public static Scanner in;
+    private static Scanner syInput;
 
     public static void first() {
-        in = new Scanner(System.in);
+        syInput = new Scanner(System.in);
         userType();
     }
 
@@ -25,7 +25,7 @@ public class Input {
             case "@":
                 return Command.BACK;
             case "#quit":
-                in.close();
+                syInput.close();
                 System.exit(0);
                 return Command.QUITE;
             default:
@@ -35,6 +35,12 @@ public class Input {
 
     public static boolean isNumber(String temp) {
         Pattern pNumber = Pattern.compile("\\d+");
+        Matcher mNumber = pNumber.matcher(temp);
+        return mNumber.matches();
+    }
+
+    public static boolean isDouble(String temp) {
+        Pattern pNumber = Pattern.compile("\\d+(\\.\\d+)?");
         Matcher mNumber = pNumber.matcher(temp);
         return mNumber.matches();
     }
@@ -72,11 +78,7 @@ public class Input {
             return false;
         }
         matcher = pSpecial.matcher(temp);
-        if (!matcher.find()) {
-            return false;
-        }
-
-        return true;
+        return matcher.find();
     }
 
     public static void printBottom() {
@@ -88,7 +90,8 @@ public class Input {
         String temp;
         while (true) {
             System.out.println("select user type\n1.user\n2.support");
-            temp = in.nextLine();
+            System.out.println("#quit");
+            temp = syInput.nextLine();
             if (checkLine(temp) == Command.NOTHING && isNumber(temp)) {
                 choice = Integer.parseInt(temp);
                 switch (choice) {
@@ -113,10 +116,10 @@ public class Input {
     public static void goUser() {
         int choice = -1;
         String temp;
-        while (choice==-1) {
+        while (choice == -1) {
             System.out.println("1.Login\n2.Register");
             printBottom();
-            temp = in.nextLine();
+            temp = syInput.nextLine();
             Command command = checkLine(temp);
             if (command == Command.NOTHING && isNumber(temp)) {
                 choice = Integer.parseInt(temp);
@@ -128,7 +131,7 @@ public class Input {
                         register();
                         return;
                     default:
-                        choice=-1;
+                        choice = -1;
                         System.out.println("invalid choise");
                         break;
                 }
@@ -150,7 +153,7 @@ public class Input {
         long phoneNumber = 0;
         while (phoneNumber == 0) {
             System.out.println("user login\nEnter phone number:");
-            temp = in.nextLine();
+            temp = syInput.nextLine();
             command = checkLine(temp);
             if (command == Command.NOTHING && isNumber(temp)) {
                 phoneNumber = Long.parseLong(temp);
@@ -171,7 +174,7 @@ public class Input {
 
         while (loop) {
             System.out.println("Enter password:");
-            temp = in.nextLine();
+            temp = syInput.nextLine();
             command = checkLine(temp);
             if (command == Command.NOTHING) {
                 password = temp;
@@ -196,19 +199,18 @@ public class Input {
     }
 
     public static void register() {
-        String temp, nationalId = "", firstName = "", lastName = "", password = "";
-        Command command;
+        String  nationalId = "", firstName = "", lastName = "", password = "";
         long phoneNumber = 0;
         System.out.println("register");
-        nationalId=defineId(null);
+        nationalId = defineId(null);
 
-        phoneNumber=definePhone(null);
+        phoneNumber = definePhone(null);
 
-        firstName=defineFistName();
+        firstName = defineFistName();
 
-        lastName=defineLastName();
+        lastName = defineLastName();
 
-        password=definePassword();
+        password = definePassword();
 
         DataBase.addUser(firstName, lastName, phoneNumber, nationalId, password);
         DataBase.addVerifyReq(phoneNumber);
@@ -220,12 +222,12 @@ public class Input {
 
     }
 
-    public static String defineId(Account allowedAcc){
+    public static String defineId(Account allowedAcc) {
         String temp, nationalId = "";
         Command command;
         while (nationalId.isEmpty()) {
             System.out.println("Enter id:");
-            temp = in.nextLine();
+            temp = syInput.nextLine();
             command = checkLine(temp);
             if (command == Command.BACK) {
                 goUser();
@@ -233,7 +235,7 @@ public class Input {
             } else if (!isNumber(temp)) {
                 System.out.println("invalid id");
 
-            } else if (DataBase.findById(temp) == null || DataBase.findById(temp)==allowedAcc) {
+            } else if (DataBase.findById(temp) == null || DataBase.findById(temp) == allowedAcc) {
                 nationalId = temp;
             } else {
                 System.out.println("Duplicate id");
@@ -242,13 +244,13 @@ public class Input {
         return nationalId;
     }
 
-    public static long definePhone(Account allowedAcc){
+    public static long definePhone(Account allowedAcc) {
         String temp;
         Command command;
         long phoneNumber = 0;
         while (phoneNumber == 0) {
             System.out.println("Enter phone number:");
-            temp = in.nextLine();
+            temp = syInput.nextLine();
             command = checkLine(temp);
             if (command == Command.BACK) {
                 goUser();
@@ -256,7 +258,7 @@ public class Input {
             } else if (!isNumber(temp)) {
                 System.out.println("invalid phone number");
 
-            } else if (DataBase.findByPhone(Long.parseLong(temp)) == null || DataBase.findByPhone(Long.parseLong(temp))==allowedAcc) {
+            } else if (DataBase.findByPhone(Long.parseLong(temp)) == null || DataBase.findByPhone(Long.parseLong(temp)) == allowedAcc) {
                 phoneNumber = Long.parseLong(temp);
             } else {
                 System.out.println("Duplicate Phone number");
@@ -265,12 +267,12 @@ public class Input {
         return phoneNumber;
     }
 
-    public static String defineFistName(){
-        String temp,  firstName = "";
+    public static String defineFistName() {
+        String temp, firstName = "";
         Command command;
         while (firstName.isEmpty()) {
             System.out.println("Enter first name:");
-            temp = in.nextLine();
+            temp = syInput.nextLine();
             command = checkLine(temp);
             temp = temp.strip().toLowerCase();
             if (command == Command.BACK) {
@@ -285,12 +287,12 @@ public class Input {
         return firstName;
     }
 
-    public static String defineLastName(){
-        String temp,  lastName = "";
+    public static String defineLastName() {
+        String temp, lastName = "";
         Command command;
         while (lastName.isEmpty()) {
             System.out.println("Enter last name:");
-            temp = in.nextLine();
+            temp = syInput.nextLine();
             command = checkLine(temp);
             temp = temp.strip().toLowerCase();
             if (command == Command.BACK) {
@@ -305,12 +307,12 @@ public class Input {
         return lastName;
     }
 
-    public static String definePassword(){
+    public static String definePassword() {
         String temp, password = "";
         Command command;
         while (password.isEmpty()) {
             System.out.println("Enter password:");
-            temp = in.nextLine();
+            temp = syInput.nextLine();
             command = checkLine(temp);
             if (command == Command.BACK) {
                 goUser();
@@ -326,19 +328,19 @@ public class Input {
 
     public static void goSupport() {
         Support support = null;
-        String temp, password = "",userName="";
+        String temp, password = "", userName = "";
         Command command;
         boolean loop = true;
         while (userName.isEmpty()) {
             System.out.println("support login\nEnter username:");
-            temp = in.nextLine();
+            temp = syInput.nextLine();
             command = checkLine(temp);
-            if (command == Command.NOTHING ) {
-                userName=temp;
+            if (command == Command.NOTHING) {
+                userName = temp;
                 support = DataBase.suppFind(userName);
                 if (support == null) {
                     System.out.println("Wrong user name");
-                    userName="";
+                    userName = "";
                 }
 
             } else if (command == Command.BACK) {
@@ -352,7 +354,7 @@ public class Input {
 
         while (loop) {
             System.out.println("Enter password:");
-            temp = in.nextLine();
+            temp = syInput.nextLine();
             command = checkLine(temp);
             if (command == Command.NOTHING) {
                 password = temp;
@@ -367,7 +369,7 @@ public class Input {
             if (support.passwordEqual(password)) {
                 loop = false;
                 System.out.println("Login successfully");
-                SupportInput.menu(support,in);
+                SupportInput.menu(support, syInput);
                 return;
             } else {
                 System.out.println("Wrong password");
@@ -376,25 +378,26 @@ public class Input {
     }
 
     public static void checkUserVr(Account account) {
-        boolean supportchecked=true;
+        boolean supportchecked = true;
 
-        VerificationRequest verifyReq=DataBase.findVerifyReq(account.getPhoneNumber());
-        if (verifyReq!=null) {
-            supportchecked=verifyReq.isSupportChecked();
+        VerificationRequest verifyReq = DataBase.findVerifyReq(account.getPhoneNumber());
+        if (verifyReq != null) {
+            supportchecked = verifyReq.isSupportChecked();
         }
         if (account.isVerifyStatus()) {
             System.out.println("hello menu");
+            UserInput.menu(account, syInput);
         } else if (!supportchecked) {
             String temp;
             System.out.println("hi");
             System.out.println(verifyReq.getMessage());
-            while (true){
+            while (true) {
                 Input.printBottom();
-                temp = in.nextLine();
+                temp = syInput.nextLine();
                 if (Input.checkLine(temp) == Command.BACK) {
                     goUser();
                     return;
-                }else {
+                } else {
                     System.out.println("invalid choice");
                 }
             }
@@ -405,7 +408,7 @@ public class Input {
             while (choice == 0) {
                 System.out.println("1.editRegister");
                 Input.printBottom();
-                temp = in.nextLine();
+                temp = syInput.nextLine();
                 if (Input.checkLine(temp) == Command.BACK) {
                     goUser();
                     return;
@@ -415,9 +418,8 @@ public class Input {
                     choice = Integer.parseInt(temp);
                     if (choice == 1) {
                         editRegister(account);
-                    }
-                    else {
-                        choice=0;
+                    } else {
+                        choice = 0;
                         System.out.println("invalid choice");
                     }
                 }
@@ -426,27 +428,26 @@ public class Input {
         }
     }
 
-    public static void editRegister(Account account){
-        String temp, nationalId = "", firstName = "", lastName = "", password = "";
-        Command command;
+    public static void editRegister(Account account) {
+        String nationalId = "", firstName = "", lastName = "", password = "";
         long phoneNumber = 0;
         System.out.println("edit register");
-        nationalId=defineId(null);
+        nationalId = defineId(account);
 
-        phoneNumber=definePhone(null);
+        phoneNumber = definePhone(account);
 
-        firstName=defineFistName();
+        firstName = defineFistName();
 
-        lastName=defineLastName();
+        lastName = defineLastName();
 
-        password=definePassword();
-        long lastPhoneNumber= account.getPhoneNumber();
+        password = definePassword();
+        long lastPhoneNumber = account.getPhoneNumber();
         account.setNationalId(nationalId);
         account.setPhoneNumber(phoneNumber);
         account.setFirstName(firstName);
         account.setLastName(lastName);
         account.setPasswordHash(password);
-        DataBase.renewVerifyReq(lastPhoneNumber,phoneNumber);
+        DataBase.renewVerifyReq(lastPhoneNumber, phoneNumber);
         System.out.println("edit register successfully");
         userType();
     }

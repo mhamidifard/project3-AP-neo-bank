@@ -9,10 +9,10 @@ enum TraType {
 }
 
 public abstract class Transaction {
-    double value;
-    Instant date;
-    TraType type;
-    long navId;
+    private double value;
+    private Instant date;
+    private TraType type;
+    private long navId;
     public Transaction(double value, TraType type){
         setDate(Calendar.now());
         setType(type);

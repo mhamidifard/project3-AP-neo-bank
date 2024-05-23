@@ -6,35 +6,35 @@ public class VerificationRequest {
     private String message;
     private boolean supportChecked;
 
-    public VerificationRequest(long phoneNumber){
+    public VerificationRequest(long phoneNumber) {
         setPhoneNumber(phoneNumber);
         setStatus(false);
         setMessage("wait to verify");
         setSupportChecked(false);
     }
 
-    public String summery(){
-        Account account=DataBase.findByPhone(phoneNumber);
-        return account.getFirstName()+" "+account.getLastName()+" "+phoneNumber;
+    public String summery() {
+        Account account = DataBase.findByPhone(phoneNumber);
+        return account.getFirstName() + " " + account.getLastName() + " " + phoneNumber;
     }
 
     @Override
     public String toString() {
-        Account account=DataBase.findByPhone(phoneNumber);
-        String text="first name: "+account.getFirstName()+"  "+"last name: "+account.getLastName()+"\n"
-                +"phone: "+account.getPhoneNumber()+"id: "+ account.getNationalId();
-        return text;
+        Account account = DataBase.findByPhone(phoneNumber);
+        return "first name: " + account.getFirstName() + "  " + "last name: " + account.getLastName() + "\n"
+                + "phone: " + account.getPhoneNumber() + "id: " + account.getNationalId();
     }
 
-    public void accept(){
+    public void accept() {
         setStatus(true);
         setSupportChecked(true);
-        Account account=DataBase.findByPhone(phoneNumber);
+        Account account = DataBase.findByPhone(phoneNumber);
         account.setVerifyStatus(true);
         DataBase.removeVerifyReq(this);
 
     }
-    public void reject(String text){
+
+    public void reject(String text) {
         setMessage(text);
         setSupportChecked(true);
     }

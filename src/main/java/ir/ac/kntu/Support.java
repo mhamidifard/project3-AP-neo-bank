@@ -3,23 +3,21 @@ package ir.ac.kntu;
 public class Support {
     private String name, userName;
     private int hashPass;
-    public Support(String name ,String userName,String password){
+
+    public Support(String name, String userName, String password) {
         setName(name);
         setUserName(userName);
         setHashPass(password);
     }
 
-    public void verify(VerificationRequest vr){
-        vr.setStatus(true);
-        vr.setMessage("true");
+    public void verify(VerificationRequest verifyReq) {
+        verifyReq.setStatus(true);
+        verifyReq.setMessage("true");
 
     }
 
-    public boolean passwordEqual(String password){
-        if(password.hashCode()==getHashPass()) {
-            return true;
-        }
-        return false;
+    public boolean passwordEqual(String password) {
+        return password.hashCode() == getHashPass();
 
     }
 

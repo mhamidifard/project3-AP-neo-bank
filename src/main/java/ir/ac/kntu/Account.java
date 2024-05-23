@@ -6,62 +6,50 @@ import java.util.List;
 import java.util.Map;
 
 public class Account {
-    private boolean verifyStatus =false;
-    private boolean contactFeature =true;
+    private boolean verifyStatus = false;
+    private boolean contactFeature = true;
     private int dataBaseNum;
-    private double balance=0;
+    private long balance = 0;
     private long phoneNumber;
     private String firstName;
     private String lastName;
     private int passwordHash;
     private String nationalId;
-    private long accountNumber=0;
+    private long accountNumber = 0;
     private Card card;
-    private List<Transaction> transactions=new ArrayList<>();
-    private Map<Long,Contact> contactMap=new HashMap<>();
+    private List<Transaction> transactions = new ArrayList<>();
+    private Map<Long, Contact> contactMap = new HashMap<>();
 
 
-    public Account(String firstName, String lastName, long phoneNumber, String id, String password) {
+    public Account(String firstName, String lastName, long phoneNumber, String nationalId, String password) {
         setFirstName(firstName);
         setLastName(lastName);
         setPhoneNumber(phoneNumber);
-        setNationalId(id);
+        setNationalId(nationalId);
         setPasswordHash(password);
     }
 
-    public void verify(){
+    public void verify() {
         setVerifyStatus(true);
     }
 
-    public boolean addContact(String firstName, String lastName, long phoneNumber){
-        if(contactMap.containsKey(phoneNumber)){
+    public boolean addContact(String firstName, String lastName, long phoneNumber) {
+        if (contactMap.containsKey(phoneNumber)) {
             return false;
-        }else {
-            contactMap.put(phoneNumber,new Contact(firstName, lastName, phoneNumber));
+        } else {
+            contactMap.put(phoneNumber, new Contact(firstName, lastName, phoneNumber));
             return true;
         }
     }
-    public boolean passwordEqual(String password){
-        if(password.hashCode()==getPasswordHash()) {
-            return true;
-        }
-        return false;
+
+    public boolean passwordEqual(String password) {
+        return password.hashCode() == getPasswordHash();
 
     }
 
-    public  void sendVerifyReq(){
+    public void sendVerifyReq() {
         DataBase.addVerifyReq(phoneNumber);
     }
-
-
-
-
-
-
-
-
-
-
 
 
     public long getPhoneNumber() {
@@ -145,11 +133,11 @@ public class Account {
         this.contactFeature = contactFeature;
     }
 
-    public double getBalance() {
+    public long getBalance() {
         return balance;
     }
 
-    public void setBalance(double balance) {
+    public void setBalanc (long balance) {
         this.balance = balance;
     }
 
