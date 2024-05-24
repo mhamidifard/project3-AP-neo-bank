@@ -1,18 +1,25 @@
 package ir.ac.kntu;
 
 public class Charge extends Transaction {
-    private long toAccount;
+    private long account;
 
-    public Charge(double value,long toAccount) {
+    public Charge(long value, long account) {
         super(value, TraType.CHARGE);
-        setToAccount(toAccount);
+        setToAccount(account);
     }
 
-    public long getToAccount() {
-        return toAccount;
+    public long getAccount() {
+        return account;
     }
 
-    public void setToAccount(long toAccount) {
-        this.toAccount = toAccount;
+    public void setToAccount(long account) {
+        this.account = account;
+    }
+
+    @Override
+    public String toStringComplete(Account account) {
+        return "charge\n" +
+                "amount: " + getValue() + " nav id: " + getNavId() +
+                "\ndate: " + getDate();
     }
 }

@@ -5,7 +5,7 @@ import java.util.*;
 public class DataBase {
     private static List<Account> accounts = new ArrayList<>();
     private static List<Support> supports = new ArrayList<>();
-    private static Map<Integer, Transaction> transactions = new HashMap<>();
+    private static Map<Long, Transaction> transactions = new HashMap<>();
     private static List<VerificationRequest> verifyRequests = new LinkedList<>();
 
 
@@ -37,7 +37,7 @@ public class DataBase {
     }
 
     public static void addUser(String firstName, String lastName, long phoneNumber, String nationalId, String password) {
-        accounts.add(new Account(firstName, lastName, phoneNumber, nationalId, password));
+        accounts.add(new Account(firstName, lastName, phoneNumber, nationalId, password, accounts.size()));
         accounts.get(accounts.size() - 1).setDataBaseNum(accounts.size() - 1);
     }
 
@@ -94,15 +94,32 @@ public class DataBase {
         return accounts;
     }
 
+    public static long addCharge(long value, long account) {
+        Charge charge = new Charge(value, account);
+        transactions.put(charge.getNavId(), charge);
+        return charge.getNavId();
+    }
+
+    public static long addTransfer(long amount, long fromAccount, long toAccount) {
+        Transfer transfer = new Transfer(amount, fromAccount, toAccount);
+        transactions.put(transfer.getNavId(), transfer);
+        return transfer.getNavId();
+    }
+
+    public static void printTransaction(long navId, Account account) {
+        System.out.println(transactions.get(navId).toStringComplete(account));
+    }
+
+
     public static void setAccounts(List<Account> accounts) {
         DataBase.accounts = accounts;
     }
 
-    public static Map<Integer, Transaction> getTransactions() {
+    public static Map<Long, Transaction> getTransactions() {
         return transactions;
     }
 
-    public static void setTransactions(Map<Integer, Transaction> transactions) {
+    public static void setTransactions(Map<Long, Transaction> transactions) {
         DataBase.transactions = transactions;
     }
 

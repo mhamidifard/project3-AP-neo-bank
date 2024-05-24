@@ -45,8 +45,13 @@ public class Contact {
         this.accountNumber = accountNumber;
     }
 
+    public String summery() {
+        return getFirstName() + " " + getLastName();
+    }
+
     @Override
     public String toString() {
-        return getFirstName() + " " + getLastName();
+        return "first name : " + getFirstName() + " last name : " + getLastName() + "\n" +
+                "phone number : " + phoneNumber + " account number : " + accountNumber;
     }
 }

@@ -22,7 +22,7 @@ public class VerificationRequest {
     public String toString() {
         Account account = DataBase.findByPhone(phoneNumber);
         return "first name: " + account.getFirstName() + "  " + "last name: " + account.getLastName() + "\n"
-                + "phone: " + account.getPhoneNumber() + "id: " + account.getNationalId();
+                + "phone: " + account.getPhoneNumber() + " id: " + account.getNationalId();
     }
 
     public void accept() {
@@ -30,6 +30,7 @@ public class VerificationRequest {
         setSupportChecked(true);
         Account account = DataBase.findByPhone(phoneNumber);
         account.setVerifyStatus(true);
+        account.setAccountNumber();
         DataBase.removeVerifyReq(this);
 
     }

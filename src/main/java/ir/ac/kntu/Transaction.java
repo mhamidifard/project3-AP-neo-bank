@@ -9,11 +9,12 @@ enum TraType {
 }
 
 public abstract class Transaction {
-    private double value;
+    private long value;
     private Instant date;
     private TraType type;
     private long navId;
-    public Transaction(double value, TraType type){
+
+    public Transaction(long value, TraType type) {
         setDate(Calendar.now());
         setType(type);
         setValue(value);
@@ -21,8 +22,8 @@ public abstract class Transaction {
 
     }
 
-    private long createId(){
-        return 12300000+DataBase.getTransactions().size();
+    private long createId() {
+        return 12300000 + DataBase.getTransactions().size();
     }
 
 //    @Override
@@ -52,11 +53,13 @@ public abstract class Transaction {
         this.navId = navId;
     }
 
-    public double getValue() {
+    public long getValue() {
         return value;
     }
 
-    public void setValue(double value) {
+    public void setValue(long value) {
         this.value = value;
     }
+
+    public abstract String toStringComplete(Account account);
 }

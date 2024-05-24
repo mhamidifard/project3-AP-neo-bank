@@ -1,9 +1,6 @@
 package ir.ac.kntu;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Account {
     private boolean verifyStatus = false;
@@ -16,17 +13,20 @@ public class Account {
     private int passwordHash;
     private String nationalId;
     private long accountNumber = 0;
+    private int numberInList;
     private Card card;
-    private List<Transaction> transactions = new ArrayList<>();
+    private List<Long> transactions = new ArrayList<>();
     private Map<Long, Contact> contactMap = new HashMap<>();
+    private List<Long> lastTransferAccs = new LinkedList<>();
 
 
-    public Account(String firstName, String lastName, long phoneNumber, String nationalId, String password) {
+    public Account(String firstName, String lastName, long phoneNumber, String nationalId, String password, int numberInList) {
         setFirstName(firstName);
         setLastName(lastName);
         setPhoneNumber(phoneNumber);
         setNationalId(nationalId);
         setPasswordHash(password);
+        setNumberInList(numberInList);
     }
 
     public void verify() {
@@ -37,10 +37,19 @@ public class Account {
         contactMap.put(phoneNumber, new Contact(firstName, lastName, phoneNumber));
     }
 
+    public void removeContact(long phoneNumber) {
+        contactMap.remove(phoneNumber);
+    }
+
+    public void editContact(long phoneNumber, String firstName, String lastName) {
+        contactMap.put(phoneNumber, new Contact(firstName, lastName, phoneNumber));
+    }
+
     public boolean passwordEqual(String password) {
         return password.hashCode() == getPasswordHash();
 
     }
+
 
     public void sendVerifyReq() {
         DataBase.addVerifyReq(phoneNumber);
@@ -50,6 +59,30 @@ public class Account {
         return contactMap.containsKey(phoneNumber);
     }
 
+    public String findContactName(long phone) {
+        return contactMap.get(phone).getFirstName() + " " + contactMap.get(phone).getLastName();
+    }
+
+    public void charge(long value) {
+        setBalance(balance + value);
+        transactions.add(DataBase.addCharge(value, getAccountNumber()));
+    }
+
+    public long doTransfer(long toAccountNum, long amount) {
+        Account toAccountObj = DataBase.findByAccNum(toAccountNum);
+        toAccountObj.setBalance(toAccountObj.getBalance() + amount);
+        setBalance(balance - amount);
+        long navId = DataBase.addTransfer(amount, accountNumber, toAccountNum);
+        addTransferToList(navId);
+        toAccountObj.addTransferToList(navId);
+        lastTransferAccs.remove(toAccountNum);
+        lastTransferAccs.addFirst(toAccountNum);
+        return navId;
+    }
+
+    public void addTransferToList(long navId) {
+        transactions.add(navId);
+    }
 
     public long getPhoneNumber() {
         return phoneNumber;
@@ -95,8 +128,8 @@ public class Account {
         return accountNumber;
     }
 
-    public void setAccountNumber(long accountNumber) {
-        this.accountNumber = accountNumber;
+    public void setAccountNumber() {
+        this.accountNumber = 861900000000L + numberInList;
     }
 
 
@@ -108,11 +141,11 @@ public class Account {
         this.card = card;
     }
 
-    public List<Transaction> getTransactions() {
+    public List<Long> getTransactions() {
         return transactions;
     }
 
-    public void setTransactions(List<Transaction> transactions) {
+    public void setTransactions(List<Long> transactions) {
         this.transactions = transactions;
     }
 
@@ -136,7 +169,7 @@ public class Account {
         return balance;
     }
 
-    public void setBalanc (long balance) {
+    public void setBalance(long balance) {
         this.balance = balance;
     }
 
@@ -154,5 +187,21 @@ public class Account {
 
     public void setDataBaseNum(int dataBaseNum) {
         this.dataBaseNum = dataBaseNum;
+    }
+
+    public int getNumberInList() {
+        return numberInList;
+    }
+
+    public void setNumberInList(int numberInList) {
+        this.numberInList = numberInList;
+    }
+
+    public List<Long> getLastTransferAccs() {
+        return lastTransferAccs;
+    }
+
+    public void setLastTransferAccs(List<Long> lastTransferAccs) {
+        this.lastTransferAccs = lastTransferAccs;
     }
 }

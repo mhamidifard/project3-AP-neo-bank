@@ -203,7 +203,7 @@ public class Input {
         long phoneNumber = 0;
         System.out.println("register");
         nationalId = defineId(null);
-        if(nationalId.equals("@")){
+        if ("@".equals(nationalId)) {
             return;
         }
         phoneNumber = definePhone(null);
@@ -211,15 +211,15 @@ public class Input {
             return;
         }
         firstName = defineFistName();
-        if (firstName.equals("@")) {
+        if ("@".equals(firstName)) {
             return;
         }
         lastName = defineLastName();
-        if (lastName.equals("@")) {
+        if ("@".equals(lastName)) {
             return;
         }
         password = definePassword();
-        if (password.equals("@")) {
+        if ("@".equals(password)) {
             return;
         }
 
@@ -445,7 +445,7 @@ public class Input {
         long phoneNumber = 0;
         System.out.println("edit register");
         nationalId = defineId(account);
-        if (nationalId.equals("@")) {
+        if ("@".equals(nationalId)) {
             return;
         }
         phoneNumber = definePhone(account);
@@ -453,15 +453,15 @@ public class Input {
             return;
         }
         firstName = defineFistName();
-        if (firstName.equals("@")) {
+        if ("@".equals(firstName)) {
             return;
         }
         lastName = defineLastName();
-        if (lastName.equals("@")) {
+        if ("@".equals(lastName)) {
             return;
         }
         password = definePassword();
-        if (password.equals("@")) {
+        if ("@".equals(password)) {
             return;
         }
         long lastPhoneNumber = account.getPhoneNumber();
