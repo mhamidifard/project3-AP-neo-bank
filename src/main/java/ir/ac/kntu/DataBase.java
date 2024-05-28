@@ -110,6 +110,9 @@ public class DataBase {
         System.out.println(transactions.get(navId).toStringComplete(account));
     }
 
+    public static Transaction findTransaction(long navId) {
+        return transactions.getOrDefault(navId, null);
+    }
 
     public static void setAccounts(List<Account> accounts) {
         DataBase.accounts = accounts;

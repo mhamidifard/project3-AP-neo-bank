@@ -1,5 +1,7 @@
 package ir.ac.kntu;
 
+import java.time.Instant;
+import java.time.format.DateTimeParseException;
 import java.util.*;
 
 public class UserInput {
@@ -69,7 +71,7 @@ public class UserInput {
         int choice = 0;
         while (true) {
             System.out.println("manage account  " + account.getAccountNumber() + "\nbalance: " + account.getBalance());
-            System.out.println("1.charge\n2.transactions");
+            System.out.println("1.charge\n2.transactions\n3.filter transactions");
             choice = simpleMenu();
             if (choice == -1) {
                 return;
@@ -79,7 +81,10 @@ public class UserInput {
                     charge();
                     break;
                 case 2:
-
+                    listTransactions(null, null);
+                    break;
+                case 3:
+                    goFilterTra();
                     break;
 
                 default:
@@ -112,6 +117,81 @@ public class UserInput {
         }
         //manageAccount();
     }
+
+    public static void goFilterTra() {
+        Instant minDate = inFilterDate("min");
+        if (minDate == null) {
+            return;
+        }
+        Instant maxDate = inFilterDate("max");
+        if (maxDate == null) {
+            return;
+        }
+        listTransactions(minDate, maxDate);
+    }
+
+    public static void listTransactions(Instant minDate, Instant maxDate) {
+        int choice;
+        List<Long> transactions = account.getTransactions();
+        List<Long> validTransaction;
+        while (true) {
+            validTransaction = new ArrayList<>();
+            int counter = 1;
+            for (Long navId : transactions) {
+                if (filterDate(navId, minDate, maxDate)) {
+                    System.out.println(counter + ": " + navId);
+                    validTransaction.add(navId);
+                    counter++;
+                }
+            }
+            choice = simpleMenu();
+            if (choice == -1) {
+                return;
+            }
+            if (0 < choice && choice <= validTransaction.size()) {
+                showTransaction(validTransaction.get(choice - 1));
+            } else {
+                System.out.println("invalid choice");
+            }
+        }
+    }
+
+    public static Instant inFilterDate(String text) {
+        Instant ans;
+        String temp, date;
+        while (true) {
+            System.out.println("Enter " + text + " date: example(2018-02-20)");
+            Input.printBottom();
+            temp = syInput.nextLine();
+            if (Input.checkLine(temp) == Command.BACK) {
+                return null;
+            }
+            date = temp;
+
+            System.out.println("Enter " + text + " date time: example(18:05:24)");
+            Input.printBottom();
+            temp = syInput.nextLine();
+            if (Input.checkLine(temp) == Command.BACK) {
+                return null;
+            }
+            date = date + "T" + temp + "Z";
+            try {
+                ans = Instant.parse(date);
+                return ans;
+            } catch (DateTimeParseException e) {
+                System.out.println("invalid format");
+            }
+        }
+    }
+
+    public static boolean filterDate(long navId, Instant minDate, Instant maxDate) {
+        if (minDate == null || maxDate == null) {
+            return true;
+        }
+        Instant date = DataBase.findTransaction(navId).getDate();
+        return date.compareTo(minDate) > 0 && date.compareTo(maxDate) < 0;
+    }
+
 
     public static void goContacts() {
         int choice = 0;
