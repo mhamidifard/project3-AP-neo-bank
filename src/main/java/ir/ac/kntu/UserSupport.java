@@ -76,23 +76,25 @@ public class UserSupport {
         int choice;
         int size = account.getSupportRequests().size();
         SupportRequest request;
-        List<SupportRequest> requests = new ArrayList<>();
-        System.out.println("list requests");
+        List<SupportRequest> requests;
+        while (true){
+            requests = new ArrayList<>();
+            System.out.println("list requests");
 
-        for (int i = size - 1; i >= 0; i--) {
-            request = DataBase.findSuppReq(account.getSupportRequests().get(i));
-            System.out.println(size - i + "." + request.getTitle());
-            requests.add(request);
-        }
-        choice = UserInput.simpleMenu();
-        if (choice == -1) {
-            return;
-        }
-        if (0 < choice && choice <= size) {
-            goRequest(requests.get(choice-1));
-            return;
-        } else {
-            System.out.println("invalid choice");
+            for (int i = size - 1; i >= 0; i--) {
+                request = DataBase.findSuppReq(account.getSupportRequests().get(i));
+                System.out.println(size - i + "." + request.getTitle());
+                requests.add(request);
+            }
+            choice = UserInput.simpleMenu();
+            if (choice == -1) {
+                return;
+            }
+            if (0 < choice && choice <= size) {
+                goRequest(requests.get(choice-1));
+            } else {
+                System.out.println("invalid choice");
+            }
         }
     }
 

@@ -46,7 +46,7 @@ public class SupportRequest {
     }
 
     public void setNavId() {
-        this.navId = navId;
+        this.navId = 234000000+DataBase.getSupportRequests().size();
     }
 
     public String getTitle() {
