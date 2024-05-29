@@ -13,7 +13,7 @@ public class UserInput {
         syInput = systemIn;
         int choice = 0;
         while (true) {
-            System.out.println("menu\n1.manage account\n2.contacts\n3.trasfer");
+            System.out.println("menu\n1.manage account\n2.contacts\n3.trasfer\n4.support");
             choice = simpleMenu();
             if (choice == -1) {
                 return;
@@ -27,6 +27,9 @@ public class UserInput {
                     break;
                 case 3:
                     goTransfer();
+                    break;
+                case 4:
+                    UserSupport.menu(account,systemIn);
                     break;
 
                 default:

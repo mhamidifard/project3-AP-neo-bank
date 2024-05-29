@@ -23,7 +23,7 @@ push changes to the repository:
 
 ```
 git add . 
-git commit -m "commit message"
+git commit -m "commit text"
 git push
 ```
 </li>

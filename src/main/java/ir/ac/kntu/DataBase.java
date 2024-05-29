@@ -7,6 +7,7 @@ public class DataBase {
     private static List<Support> supports = new ArrayList<>();
     private static Map<Long, Transaction> transactions = new HashMap<>();
     private static List<VerificationRequest> verifyRequests = new LinkedList<>();
+    private static Map<Long, SupportRequest> supportRequests = new HashMap<>();
 
 
     public static Account findByAccNum(long accNum) {
@@ -114,6 +115,17 @@ public class DataBase {
         return transactions.getOrDefault(navId, null);
     }
 
+    public static SupportRequest findSuppReq(Long navId) {
+        return supportRequests.getOrDefault(navId, null);
+    }
+
+    public static SupportRequest addSupportReq(String title, long userPhone) {
+        SupportRequest request = new SupportRequest(userPhone,title);
+        supportRequests.put(request.getNavId(), request);
+        return request;
+    }
+
+
     public static void setAccounts(List<Account> accounts) {
         DataBase.accounts = accounts;
     }
@@ -140,5 +152,13 @@ public class DataBase {
 
     public static void setVerifyRequests(List<VerificationRequest> verifyRequests) {
         DataBase.verifyRequests = verifyRequests;
+    }
+
+    public static Map<Long, SupportRequest> getSupportRequests() {
+        return supportRequests;
+    }
+
+    public static void setSupportRequests(Map<Long, SupportRequest> supportRequests) {
+        DataBase.supportRequests = supportRequests;
     }
 }

@@ -18,6 +18,7 @@ public class Account {
     private List<Long> transactions = new ArrayList<>();
     private Map<Long, Contact> contactMap = new HashMap<>();
     private List<Long> lastTransferAccs = new LinkedList<>();
+    private List<Long> supportRequests = new ArrayList<>();
 
 
     public Account(String firstName, String lastName, long phoneNumber, String nationalId, String password, int numberInList) {
@@ -82,6 +83,10 @@ public class Account {
 
     public void addTransferToList(long navId) {
         transactions.add(navId);
+    }
+
+    public void addSuppReq(long navId){
+        supportRequests.add(navId);
     }
 
     public long getPhoneNumber() {
@@ -203,5 +208,13 @@ public class Account {
 
     public void setLastTransferAccs(List<Long> lastTransferAccs) {
         this.lastTransferAccs = lastTransferAccs;
+    }
+
+    public List<Long> getSupportRequests() {
+        return supportRequests;
+    }
+
+    public void setSupportRequests(List<Long> supportRequests) {
+        this.supportRequests = supportRequests;
     }
 }
