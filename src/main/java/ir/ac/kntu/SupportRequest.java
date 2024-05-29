@@ -4,21 +4,28 @@ import java.util.ArrayList;
 import java.util.List;
 
 enum Status {
-    CREATED, PROCESS, CLOSED;
+    CREATED, PROCESS, CLOSED, NOTHING;
+}
+
+enum Subject {
+    REPORT, CONTACTS, TRANSFER, SETTING, NOTHING;
 }
 
 public class SupportRequest {
+    public static final long firstId = 234000000;
     private List<Message> messages = new ArrayList<>();
     private String title;
     private long userPhone;
     private long navId;
     private Status status;
+    private Subject subject;
 
-    public SupportRequest(long userPhone,String title) {
-        this.title=title;
+    public SupportRequest(long userPhone, String title, Subject subject) {
+        this.title = title;
         this.userPhone = userPhone;
         setNavId();
         status = Status.CREATED;
+        this.subject = subject;
     }
 
     public void addMessage(String text, Sender sender) {
@@ -46,7 +53,7 @@ public class SupportRequest {
     }
 
     public void setNavId() {
-        this.navId = 234000000+DataBase.getSupportRequests().size();
+        this.navId = 234000000 + DataBase.getSupportRequests().size();
     }
 
     public String getTitle() {
@@ -65,12 +72,23 @@ public class SupportRequest {
         this.status = status;
     }
 
+    public Subject getSubject() {
+        return subject;
+    }
+
+    public void setSubject(Subject subject) {
+        this.subject = subject;
+    }
+
+    public String summry() {
+        return "subject: " + subject + " title: " + title + " userPhone: " + userPhone + " status: " + status;
+    }
 
     @Override
     public String toString() {
-        String ans = "title: " + title + " userPhone: " + userPhone + " status: " + status;
+        String ans = "subject: " + subject + " status: " + status + "\ntitle: " + title + " userPhone: " + userPhone+"\n";
         for (Message message : messages) {
-            ans += "\nsender: " + message.getSender() + "\nmessage: " + message.getText()+"\n";
+            ans += "\nsender: " + message.getSender() + "\nmessage: " + message.getText() + "\n";
         }
         return ans;
     }

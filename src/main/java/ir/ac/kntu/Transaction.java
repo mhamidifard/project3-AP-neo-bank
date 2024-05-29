@@ -19,7 +19,6 @@ public abstract class Transaction {
         setType(type);
         setValue(value);
         setNavId(createId());
-
     }
 
     private long createId() {
@@ -59,6 +58,10 @@ public abstract class Transaction {
 
     public void setValue(long value) {
         this.value = value;
+    }
+
+    public  String summery(){
+        return type+"  nav id: "+getNavId()+" date: "+getDate();
     }
 
     public abstract String toStringComplete(Account account);

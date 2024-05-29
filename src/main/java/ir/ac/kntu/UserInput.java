@@ -142,7 +142,7 @@ public class UserInput {
             int counter = 1;
             for (Long navId : transactions) {
                 if (filterDate(navId, minDate, maxDate)) {
-                    System.out.println(counter + ": " + navId);
+                    System.out.println(counter + ": " + DataBase.findTransaction(navId).summery());
                     validTransaction.add(navId);
                     counter++;
                 }

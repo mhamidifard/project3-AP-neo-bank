@@ -72,7 +72,7 @@ public class Account {
     public long doTransfer(long toAccountNum, long amount) {
         Account toAccountObj = DataBase.findByAccNum(toAccountNum);
         toAccountObj.setBalance(toAccountObj.getBalance() + amount);
-        setBalance(balance - amount);
+        setBalance(balance - amount-Transfer.fee);
         long navId = DataBase.addTransfer(amount, accountNumber, toAccountNum);
         addTransferToList(navId);
         toAccountObj.addTransferToList(navId);

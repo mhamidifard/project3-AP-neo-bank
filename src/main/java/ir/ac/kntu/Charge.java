@@ -15,7 +15,7 @@ public class Charge extends Transaction {
     public void setToAccount(long account) {
         this.account = account;
     }
-
+    
     @Override
     public String toStringComplete(Account account) {
         return "charge\n" +

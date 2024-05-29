@@ -35,9 +35,40 @@ public class UserSupport {
         }
     }
 
+    public static Subject choiceSubject() {
+        int choice = 0;
+        while (true) {
+            System.out.println("select subject");
+            System.out.println("1.report\n2.contacts\n3.transfer\n4.setting");
+            choice = UserInput.simpleMenu();
+            if (choice == -1) {
+                return null;
+            }
+            switch (choice) {
+                case 1:
+                    return Subject.REPORT;
+                case 2:
+                    return Subject.CONTACTS;
+                case 3:
+                    return Subject.TRANSFER;
+                case 4:
+                    return Subject.SETTING;
+
+                default:
+                    System.out.println("invalid choice");
+                    break;
+            }
+
+        }
+    }
+
     public static void inAddRequest() {
         String temp, title = "";
         Command command;
+        Subject subject = choiceSubject();
+        if (subject == null) {
+            return;
+        }
         while (title.isEmpty()) {
             System.out.println("Enter title:");
             temp = syInput.nextLine();
@@ -49,7 +80,7 @@ public class UserSupport {
                 title = temp;
             }
         }
-        SupportRequest request = DataBase.addSupportReq(title, account.getPhoneNumber());
+        SupportRequest request = DataBase.addSupportReq(title, account.getPhoneNumber(), subject);
         account.addSuppReq(request.getNavId());
         inAddMessage(request);
     }
@@ -77,7 +108,7 @@ public class UserSupport {
         int size = account.getSupportRequests().size();
         SupportRequest request;
         List<SupportRequest> requests;
-        while (true){
+        while (true) {
             requests = new ArrayList<>();
             System.out.println("list requests");
 
@@ -91,7 +122,7 @@ public class UserSupport {
                 return;
             }
             if (0 < choice && choice <= size) {
-                goRequest(requests.get(choice-1));
+                goRequest(requests.get(choice - 1));
             } else {
                 System.out.println("invalid choice");
             }

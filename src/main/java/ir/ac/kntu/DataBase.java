@@ -119,8 +119,8 @@ public class DataBase {
         return supportRequests.getOrDefault(navId, null);
     }
 
-    public static SupportRequest addSupportReq(String title, long userPhone) {
-        SupportRequest request = new SupportRequest(userPhone,title);
+    public static SupportRequest addSupportReq(String title, long userPhone, Subject subject) {
+        SupportRequest request = new SupportRequest(userPhone, title, subject);
         supportRequests.put(request.getNavId(), request);
         return request;
     }
