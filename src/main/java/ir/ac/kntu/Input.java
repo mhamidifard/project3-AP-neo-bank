@@ -17,6 +17,10 @@ public class Input {
 
     public static void first() {
         syInput = new Scanner(System.in);
+        SupportInput.setSyInput(syInput);
+        UserInput.setSyInput(syInput);
+        UserSupport.setSyInput(syInput);
+        UserSetting.setSyInput(syInput);
         userType();
     }
 
@@ -383,7 +387,7 @@ public class Input {
             if (support.passwordEqual(password)) {
                 loop = false;
                 System.out.println("Login successfully");
-                SupportInput.menu(support, syInput);
+                SupportInput.menu(support);
                 return;
             } else {
                 System.out.println("Wrong password");
@@ -400,7 +404,7 @@ public class Input {
         }
         if (account.isVerifyStatus()) {
             System.out.println("hello menu");
-            UserInput.menu(account, syInput);
+            UserInput.menu(account);
             return;
         } else if (!supportchecked) {
             String temp;

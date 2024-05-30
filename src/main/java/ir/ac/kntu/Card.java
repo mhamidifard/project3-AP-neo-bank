@@ -20,7 +20,7 @@ public class Card {
         return hashCardPass;
     }
 
-    public void setHashCardPass(String Pass) {
-        this.hashCardPass = Pass.hashCode();
+    public void setHashCardPass(String pass) {
+        this.hashCardPass = pass.hashCode();
     }
 }

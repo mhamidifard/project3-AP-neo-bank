@@ -5,12 +5,16 @@ import java.util.Scanner;
 public class UserSetting {
     private static Account account;
     private static Scanner syInput;
-    public static void settingMenu(Account account1,Scanner syInput1){
-        account=account1;
-        syInput=syInput1;
+
+    public static void setSyInput(Scanner syInput) {
+        UserSetting.syInput = syInput;
+    }
+
+    public static void settingMenu(Account account1) {
+        account = account1;
         int choice;
         while (true) {
-            System.out.println("setting\ncontacts feature="+account.isContactFeature());
+            System.out.println("setting\ncontacts feature=" + account.isContactFeature());
             System.out.println("1.change contacts feature status\n2.change password\n3.change card pass");
             choice = UserInput.simpleMenu();
             if (choice == -1) {
@@ -33,7 +37,8 @@ public class UserSetting {
             }
         }
     }
-    public static void changePassword(){
+
+    public static void changePassword() {
         String password = Input.definePassword();
         if ("@".equals(password)) {
             return;
@@ -41,7 +46,7 @@ public class UserSetting {
         account.setPasswordHash(password);
     }
 
-    public static void changeCardPass(){
+    public static void changeCardPass() {
         String temp, cardPass = "";
         Command command;
         while (cardPass.isEmpty()) {
@@ -51,7 +56,7 @@ public class UserSetting {
             if (command == Command.BACK) {
                 return;
 
-            } else if (Input.isNumber(temp) && temp.length()==4) {
+            } else if (Input.isNumber(temp) && temp.length() == 4) {
                 cardPass = temp;
             } else {
                 System.out.println("invalid pass");

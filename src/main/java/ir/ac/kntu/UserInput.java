@@ -8,9 +8,12 @@ public class UserInput {
     private static Account account;
     private static Scanner syInput;
 
-    public static void menu(Account account1, Scanner systemIn) {
+    public static void setSyInput(Scanner syInput) {
+        UserInput.syInput = syInput;
+    }
+
+    public static void menu(Account account1) {
         account = account1;
-        syInput = systemIn;
         int choice = 0;
         while (true) {
             System.out.println("menu\n1.manage account\n2.contacts\n3.trasfer\n4.support\n5.setting");
@@ -29,10 +32,10 @@ public class UserInput {
                     goTransfer();
                     break;
                 case 4:
-                    UserSupport.menu(account,systemIn);
+                    UserSupport.menu(account);
                     break;
                 case 5:
-                    UserSetting.settingMenu(account,systemIn);
+                    UserSetting.settingMenu(account);
                     break;
 
                 default:

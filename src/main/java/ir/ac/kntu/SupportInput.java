@@ -1,21 +1,29 @@
 package ir.ac.kntu;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import ir.ac.kntu.util.ComprableUser;
+
+import java.time.Instant;
+import java.util.*;
+
+enum Filter {
+    PHONE, FIRSTNAME, LASTNAME;
+}
 
 public class SupportInput {
     private static Scanner syInput;
     private static Support support;
 
-    public static void menu(Support support1, Scanner systemIn) {
+    public static void setSyInput(Scanner syInput) {
+        SupportInput.syInput = syInput;
+    }
+
+    public static void menu(Support support1) {
         support = support1;
-        syInput = systemIn;
         String temp;
 
         int choice = 0;
         while (true) {
-            System.out.println("1.verify\n2.requests");
+            System.out.println("1.verify\n2.requests\n3.list of users");
             Input.printBottom();
             temp = syInput.nextLine();
             if (Input.checkLine(temp) == Command.BACK) {
@@ -33,6 +41,8 @@ public class SupportInput {
                     case 2:
                         inFilterReq();
                         break;
+                    case 3:
+                        inFilterUser();
                     default:
                         choice = 0;
                         System.out.println("invalid choice");
@@ -307,4 +317,192 @@ public class SupportInput {
 
         }
     }
+
+    public static void inFilterUser() {
+        Map<Filter, String> filters = new HashMap<>();
+        int choice = 0;
+        while (true) {
+            System.out.println("filter user by");
+            System.out.println("1.first name\n2.last name\n3.phone number\n4.apply");
+            choice = UserInput.simpleMenu();
+            if (choice == -1) {
+                return;
+            } else if (choice == 1) {
+                inFirstNameFilter(filters);
+            } else if (choice == 2) {
+                inLastNameFilter(filters);
+            } else if (choice == 3) {
+                inpPhoneFilter(filters);
+            } else if (choice == 4) {
+                filterUser(filters);
+            } else {
+                System.out.println("invalid choice");
+            }
+        }
+    }
+
+    public static void inFirstNameFilter(Map<Filter, String> filters) {
+        String firstName = Input.defineFistName();
+        if ("@".equals(firstName)) {
+            return;
+        }
+        filters.put(Filter.FIRSTNAME, firstName);
+    }
+
+    public static void inLastNameFilter(Map<Filter, String> filters) {
+        String lastName = Input.defineLastName();
+        if ("@".equals(lastName)) {
+            return;
+        }
+        filters.put(Filter.LASTNAME, lastName);
+    }
+
+    public static void inpPhoneFilter(Map<Filter, String> filters) {
+        String temp, phone = "";
+        Command command;
+        while (phone.isEmpty()) {
+            System.out.println("Enter phone number:");
+            temp = syInput.nextLine();
+            command = Input.checkLine(temp);
+            temp = temp.strip();
+            if (command == Command.BACK) {
+                return;
+            } else if (!Input.isNumber(temp)) {
+                System.out.println("invalid phone number");
+            } else {
+                phone = temp;
+            }
+        }
+        filters.put(Filter.PHONE, phone);
+
+    }
+
+    public static void filterUser(Map<Filter, String> filters) {
+        ArrayList<ComprableUser> listUser = new ArrayList<>();
+        for (Account account : DataBase.getAccounts()) {
+            ComprableUser user = new ComprableUser(account);
+            for (HashMap.Entry<Filter, String> filter : filters.entrySet()) {
+                checkUser(filter, account, user);
+            }
+            if (user.isCondition()) {
+                listUser.add(user);
+            }
+        }
+        listUser.sort(ComprableUser::compareTo);
+        showUserList(listUser);
+    }
+
+    public static void checkUser(HashMap.Entry<Filter, String> filter, Account account, ComprableUser user) {
+        switch (filter.getKey()) {
+            case FIRSTNAME:
+                user.addLength(account.getFirstName().length());
+                if (!similarity(account.getFirstName(), filter.getValue())) {
+                    user.setCondition(false);
+                }
+                break;
+            case LASTNAME:
+                user.addLength(account.getLastName().length());
+                if (!similarity(account.getLastName(), filter.getValue())) {
+                    user.setCondition(false);
+                }
+                break;
+            case PHONE:
+                if (Long.parseLong(filter.getValue()) != account.getPhoneNumber()) {
+                    user.setCondition(false);
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    public static boolean similarity(String text1, String text2) {
+        for (int i = 0; i <= text1.length() - text2.length(); i++) {
+            if (text1.substring(i, i + text2.length()).equals(text1)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static void showUserList(List<ComprableUser> listUser) {
+        System.out.println("list of users:");
+        int choice;
+        while (true) {
+            for (int i = 0; i < listUser.size(); i++) {
+                System.out.println(i + 1 + ". " + listUser.get(i).getAccount().summery());
+            }
+            choice = UserInput.simpleMenu();
+            if (choice == -1) {
+                return;
+            }
+            if (0 < choice && choice <= listUser.size()) {
+                showUser(listUser.get(choice - 1).getAccount());
+            } else {
+                System.out.println("invalid choice");
+            }
+        }
+    }
+
+    public static void showUser(Account account) {
+        int choice;
+        while (true) {
+            System.out.println(account);
+            System.out.println("\n1.list transactions\n2.filter tranactions");
+            choice = UserInput.simpleMenu();
+            if (choice == -1) {
+                return;
+            }
+            switch (choice) {
+                case 1:
+                    listTransactions(account, null, null);
+                    break;
+                case 2:
+                    goFilterTra(account);
+                    break;
+                default:
+                    System.out.println("invalid choice");
+                    break;
+            }
+        }
+    }
+
+    public static void goFilterTra(Account account) {
+        Instant minDate = UserInput.inFilterDate("min");
+        if (minDate == null) {
+            return;
+        }
+        Instant maxDate = UserInput.inFilterDate("max");
+        if (maxDate == null) {
+            return;
+        }
+        listTransactions(account, minDate, maxDate);
+    }
+
+    public static void listTransactions(Account account, Instant minDate, Instant maxDate) {
+        int choice;
+        List<Long> transactions = account.getTransactions();
+        List<Long> validTransaction;
+        while (true) {
+            validTransaction = new ArrayList<>();
+            int counter = 1;
+            for (Long navId : transactions) {
+                if (UserInput.filterDate(navId, minDate, maxDate)) {
+                    System.out.println(counter + ": " + DataBase.findTransaction(navId).summery());
+                    validTransaction.add(navId);
+                    counter++;
+                }
+            }
+            choice = UserInput.simpleMenu();
+            if (choice == -1) {
+                return;
+            }
+            if (0 < choice && choice <= validTransaction.size()) {
+                UserInput.showTransaction(validTransaction.get(choice - 1));
+            } else {
+                System.out.println("invalid choice");
+            }
+        }
+    }
+
 }

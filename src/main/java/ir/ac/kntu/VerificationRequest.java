@@ -15,7 +15,11 @@ public class VerificationRequest {
 
     public String summery() {
         Account account = DataBase.findByPhone(phoneNumber);
-        return account.getFirstName() + " " + account.getLastName() + " " + phoneNumber;
+        String ans= account.getFirstName() + " " + account.getLastName() + " " + phoneNumber;
+        if(!supportChecked){
+            ans+="   new";
+        }
+        return ans;
     }
 
     @Override

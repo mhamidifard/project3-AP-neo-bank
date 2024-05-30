@@ -8,9 +8,12 @@ public class UserSupport {
     private static Account account;
     private static Scanner syInput;
 
-    public static void menu(Account account1, Scanner syInput1) {
+    public static void setSyInput(Scanner syInput) {
+        UserSupport.syInput = syInput;
+    }
+
+    public static void menu(Account account1) {
         account = account1;
-        syInput = syInput1;
         int choice = 0;
         while (true) {
             System.out.println("Support section");

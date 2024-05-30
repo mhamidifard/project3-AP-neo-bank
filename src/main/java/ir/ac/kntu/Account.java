@@ -223,4 +223,14 @@ public class Account {
     public void setSupportRequests(List<Long> supportRequests) {
         this.supportRequests = supportRequests;
     }
+
+    @Override
+    public String toString(){
+        return "first name: "+firstName+" last name: "+lastName+
+                "\nphone: "+phoneNumber+"account number: "+accountNumber;
+    }
+
+    public String summery(){
+        return firstName+" "+lastName+" phone: "+phoneNumber;
+    }
 }
