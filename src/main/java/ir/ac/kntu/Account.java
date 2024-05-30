@@ -32,6 +32,8 @@ public class Account {
 
     public void verify() {
         setVerifyStatus(true);
+        setAccountNumber();
+        card=new Card(accountNumber);
     }
 
     public void addContact(String firstName, String lastName, long phoneNumber) {
@@ -87,6 +89,10 @@ public class Account {
 
     public void addSuppReq(long navId){
         supportRequests.add(navId);
+    }
+
+    public void changeCardPass(String pass){
+        card.setHashCardPass(pass);
     }
 
     public long getPhoneNumber() {

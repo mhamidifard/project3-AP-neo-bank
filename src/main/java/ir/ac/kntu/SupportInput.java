@@ -107,30 +107,6 @@ public class SupportInput {
             }
         }
     }
-//    public static void requestMenu() {
-//        int choice = 0;
-//        while (true) {
-//            System.out.println("Support section");
-//            System.out.println("1.all requests\n2.new requests\n");
-//            choice = UserInput.simpleMenu();
-//            if (choice == -1) {
-//                return;
-//            }
-//            switch (choice) {
-//                case 1:
-//                    allRequest();
-//                    break;
-//                case 2:
-//                    newRequest();
-//                    break;
-//
-//                default:
-//                    System.out.println("invalid choice");
-//                    break;
-//            }
-//
-//        }
-//    }
 
     public static void inFilterReq() {
         long phoneNumber = inPhoneFilter();

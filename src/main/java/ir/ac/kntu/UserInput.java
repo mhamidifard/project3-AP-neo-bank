@@ -13,7 +13,7 @@ public class UserInput {
         syInput = systemIn;
         int choice = 0;
         while (true) {
-            System.out.println("menu\n1.manage account\n2.contacts\n3.trasfer\n4.support");
+            System.out.println("menu\n1.manage account\n2.contacts\n3.trasfer\n4.support\n5.setting");
             choice = simpleMenu();
             if (choice == -1) {
                 return;
@@ -30,6 +30,9 @@ public class UserInput {
                     break;
                 case 4:
                     UserSupport.menu(account,systemIn);
+                    break;
+                case 5:
+                    UserSetting.settingMenu(account,systemIn);
                     break;
 
                 default:
@@ -223,11 +226,11 @@ public class UserInput {
     public static void addcontact() {
         String firstName, lastName;
         System.out.println("add contact");
-        firstName = defContactFistName();
+        firstName = Input.defineFistName();
         if ("@".equals(firstName)) {
             return;
         }
-        lastName = defContactLastName();
+        lastName = Input.defineLastName();
         if ("@".equals(lastName)) {
             return;
         }
@@ -258,43 +261,43 @@ public class UserInput {
         }
     }
 
-    public static String defContactFistName() {
-        String temp, firstName = "";
-        Command command;
-        while (firstName.isEmpty()) {
-            System.out.println("Enter first name:");
-            temp = syInput.nextLine();
-            command = Input.checkLine(temp);
-            temp = temp.strip().toLowerCase();
-            if (command == Command.BACK) {
-                return "@";
-            } else if (!Input.isLetter(temp)) {
-                System.out.println("invalid first name");
-            } else {
-                firstName = temp;
-            }
-        }
-        return firstName;
-    }
+//    public static String defContactFistName() {
+//        String temp, firstName = "";
+//        Command command;
+//        while (firstName.isEmpty()) {
+//            System.out.println("Enter first name:");
+//            temp = syInput.nextLine();
+//            command = Input.checkLine(temp);
+//            temp = temp.strip().toLowerCase();
+//            if (command == Command.BACK) {
+//                return "@";
+//            } else if (!Input.isLetter(temp)) {
+//                System.out.println("invalid first name");
+//            } else {
+//                firstName = temp;
+//            }
+//        }
+//        return firstName;
+//    }
 
-    public static String defContactLastName() {
-        String temp, lastName = "";
-        Command command;
-        while (lastName.isEmpty()) {
-            System.out.println("Enter first name:");
-            temp = syInput.nextLine();
-            command = Input.checkLine(temp);
-            temp = temp.strip().toLowerCase();
-            if (command == Command.BACK) {
-                return "@";
-            } else if (!Input.isLetter(temp)) {
-                System.out.println("invalid first name");
-            } else {
-                lastName = temp;
-            }
-        }
-        return lastName;
-    }
+//    public static String defContactLastName() {
+//        String temp, lastName = "";
+//        Command command;
+//        while (lastName.isEmpty()) {
+//            System.out.println("Enter first name:");
+//            temp = syInput.nextLine();
+//            command = Input.checkLine(temp);
+//            temp = temp.strip().toLowerCase();
+//            if (command == Command.BACK) {
+//                return "@";
+//            } else if (!Input.isLetter(temp)) {
+//                System.out.println("invalid first name");
+//            } else {
+//                lastName = temp;
+//            }
+//        }
+//        return lastName;
+//    }
 
     public static void listContacts() {
         int choice;
@@ -345,11 +348,11 @@ public class UserInput {
     public static void editContact(long contactPhone) {
         String firstName, lastName;
         System.out.println("edit contact");
-        firstName = defContactFistName();
+        firstName = Input.defineFistName();
         if ("@".equals(firstName)) {
             return;
         }
-        lastName = defContactLastName();
+        lastName = Input.defineLastName();
         if ("@".equals(lastName)) {
             return;
         }
@@ -509,4 +512,6 @@ public class UserInput {
         }
 
     }
+
+
 }

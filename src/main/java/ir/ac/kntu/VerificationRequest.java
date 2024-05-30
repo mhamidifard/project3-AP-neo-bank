@@ -29,10 +29,8 @@ public class VerificationRequest {
         setStatus(true);
         setSupportChecked(true);
         Account account = DataBase.findByPhone(phoneNumber);
-        account.setVerifyStatus(true);
-        account.setAccountNumber();
+        account.verify();
         DataBase.removeVerifyReq(this);
-
     }
 
     public void reject(String text) {

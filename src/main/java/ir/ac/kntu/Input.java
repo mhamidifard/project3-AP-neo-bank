@@ -11,6 +11,10 @@ enum Command {
 public class Input {
     private static Scanner syInput;
 
+    public static Scanner getSyInput() {
+        return syInput;
+    }
+
     public static void first() {
         syInput = new Scanner(System.in);
         userType();

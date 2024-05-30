@@ -18,8 +18,7 @@ public class Main {
 
         DataBase.addSupport("mohammad", "admin12", "1382*");
         DataBase.addUser("max","verstappen",912,"331","20002001Wz@");
-        DataBase.findById("331").setVerifyStatus(true);
-        DataBase.findById("331").setAccountNumber();
+        DataBase.findById("331").verify();
 //        DataBase.getAccounts().add(new Account("mohammad","hamidi",9335236598L,"3265987412","1234"));
 //        a.addContact("mohammad","hamidi",9335236598L);
 //        System.out.println(a.getContactMap().values().toString());
