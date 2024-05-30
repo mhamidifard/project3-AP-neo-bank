@@ -1,7 +1,6 @@
 package ir.ac.kntu;
 
 import ir.ac.kntu.util.ComprableUser;
-
 import java.time.Instant;
 import java.util.*;
 
@@ -43,6 +42,7 @@ public class SupportInput {
                         break;
                     case 3:
                         inFilterUser();
+                        break;
                     default:
                         choice = 0;
                         System.out.println("invalid choice");
@@ -335,6 +335,7 @@ public class SupportInput {
                 inpPhoneFilter(filters);
             } else if (choice == 4) {
                 filterUser(filters);
+                filters = new HashMap<>();
             } else {
                 System.out.println("invalid choice");
             }
@@ -396,13 +397,13 @@ public class SupportInput {
         switch (filter.getKey()) {
             case FIRSTNAME:
                 user.addLength(account.getFirstName().length());
-                if (!similarity(account.getFirstName(), filter.getValue())) {
+                if (!Input.similarity(account.getFirstName(), filter.getValue())) {
                     user.setCondition(false);
                 }
                 break;
             case LASTNAME:
                 user.addLength(account.getLastName().length());
-                if (!similarity(account.getLastName(), filter.getValue())) {
+                if (!Input.similarity(account.getLastName(), filter.getValue())) {
                     user.setCondition(false);
                 }
                 break;
@@ -414,15 +415,6 @@ public class SupportInput {
             default:
                 break;
         }
-    }
-
-    public static boolean similarity(String text1, String text2) {
-        for (int i = 0; i <= text1.length() - text2.length(); i++) {
-            if (text1.substring(i, i + text2.length()).equals(text1)) {
-                return true;
-            }
-        }
-        return false;
     }
 
     public static void showUserList(List<ComprableUser> listUser) {

@@ -483,4 +483,13 @@ public class Input {
         //userType();
     }
 
+    public static boolean similarity(String text1, String text2) {
+        for (int i = 0; i <= text1.length() - text2.length(); i++) {
+            if (text1.substring(i, i + text2.length()).equals(text2)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

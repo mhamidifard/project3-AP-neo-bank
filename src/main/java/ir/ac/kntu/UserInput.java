@@ -264,44 +264,6 @@ public class UserInput {
         }
     }
 
-//    public static String defContactFistName() {
-//        String temp, firstName = "";
-//        Command command;
-//        while (firstName.isEmpty()) {
-//            System.out.println("Enter first name:");
-//            temp = syInput.nextLine();
-//            command = Input.checkLine(temp);
-//            temp = temp.strip().toLowerCase();
-//            if (command == Command.BACK) {
-//                return "@";
-//            } else if (!Input.isLetter(temp)) {
-//                System.out.println("invalid first name");
-//            } else {
-//                firstName = temp;
-//            }
-//        }
-//        return firstName;
-//    }
-
-//    public static String defContactLastName() {
-//        String temp, lastName = "";
-//        Command command;
-//        while (lastName.isEmpty()) {
-//            System.out.println("Enter first name:");
-//            temp = syInput.nextLine();
-//            command = Input.checkLine(temp);
-//            temp = temp.strip().toLowerCase();
-//            if (command == Command.BACK) {
-//                return "@";
-//            } else if (!Input.isLetter(temp)) {
-//                System.out.println("invalid first name");
-//            } else {
-//                lastName = temp;
-//            }
-//        }
-//        return lastName;
-//    }
-
     public static void listContacts() {
         int choice;
         ArrayList<Long> contactList;
@@ -515,6 +477,5 @@ public class UserInput {
         }
 
     }
-
 
 }

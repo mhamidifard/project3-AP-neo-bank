@@ -227,7 +227,7 @@ public class Account {
     @Override
     public String toString(){
         return "first name: "+firstName+" last name: "+lastName+
-                "\nphone: "+phoneNumber+"account number: "+accountNumber;
+                "\nphone: "+phoneNumber+" account number: "+accountNumber;
     }
 
     public String summery(){
