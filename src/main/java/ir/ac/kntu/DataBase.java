@@ -109,7 +109,7 @@ public class DataBase {
     }
 
     public static void printTransaction(long navId, Account account) {
-        System.out.println(transactions.get(navId).toStringComplete(account));
+        Print.info(transactions.get(navId).toStringComplete(account));
     }
 
     public static Transaction findTransaction(long navId) {

@@ -16,8 +16,8 @@ public class UserSupport {
         account = account1;
         int choice = 0;
         while (true) {
-            System.out.println("Support section");
-            System.out.println("1.add request\n2.list of requests\n");
+            Print.info("Support section");
+            Print.menu("1.add request\n2.list of requests\n");
             choice = UserInput.simpleMenu();
             if (choice == -1) {
                 return;
@@ -31,7 +31,7 @@ public class UserSupport {
                     break;
 
                 default:
-                    System.out.println("invalid choice");
+                    Print.erorr("invalid choice");
                     break;
             }
 
@@ -41,8 +41,8 @@ public class UserSupport {
     public static Subject choiceSubject() {
         int choice = 0;
         while (true) {
-            System.out.println("select subject");
-            System.out.println("1.report\n2.contacts\n3.transfer\n4.setting");
+            Print.info("select subject");
+            Print.menu("1.report\n2.contacts\n3.transfer\n4.setting");
             choice = UserInput.simpleMenu();
             if (choice == -1) {
                 return null;
@@ -58,7 +58,7 @@ public class UserSupport {
                     return Subject.SETTING;
 
                 default:
-                    System.out.println("invalid choice");
+                    Print.erorr("invalid choice");
                     break;
             }
 
@@ -73,7 +73,7 @@ public class UserSupport {
             return;
         }
         while (title.isEmpty()) {
-            System.out.println("Enter title:");
+            Print.input("Enter title:");
             temp = syInput.nextLine();
             command = Input.checkLine(temp);
             temp = temp.strip().toLowerCase();
@@ -92,7 +92,7 @@ public class UserSupport {
         String temp, text = "";
         Command command;
         while (text.isEmpty()) {
-            System.out.println("Enter message:");
+            Print.input("Enter message:");
             temp = syInput.nextLine();
             command = Input.checkLine(temp);
             temp = temp.strip().toLowerCase();
@@ -103,7 +103,7 @@ public class UserSupport {
             }
         }
         request.addMessage(text, Sender.USER);
-        System.out.println("Message sent successfully");
+        Print.info("Message sent successfully");
     }
 
     public static void listRequest() {
@@ -113,11 +113,11 @@ public class UserSupport {
         List<SupportRequest> requests;
         while (true) {
             requests = new ArrayList<>();
-            System.out.println("list requests");
+            Print.info("list requests");
 
             for (int i = size - 1; i >= 0; i--) {
                 request = DataBase.findSuppReq(account.getSupportRequests().get(i));
-                System.out.println(size - i + "." + request.getTitle());
+                Print.list(size - i + "." + request.getTitle());
                 requests.add(request);
             }
             choice = UserInput.simpleMenu();
@@ -127,16 +127,16 @@ public class UserSupport {
             if (0 < choice && choice <= size) {
                 goRequest(requests.get(choice - 1));
             } else {
-                System.out.println("invalid choice");
+                Print.erorr("invalid choice");
             }
         }
     }
 
     public static void goRequest(SupportRequest request) {
-        System.out.println(request);
+        Print.info(request.toString());
         int choice = 0;
         while (true) {
-            System.out.println("1.add message");
+            Print.menu("1.add message");
             choice = UserInput.simpleMenu();
             if (choice == -1) {
                 return;
@@ -144,7 +144,7 @@ public class UserSupport {
                 inAddMessage(request);
                 return;
             } else {
-                System.out.println("invalid choice");
+                Print.erorr("invalid choice");
             }
         }
     }

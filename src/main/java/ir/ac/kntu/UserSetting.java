@@ -14,8 +14,8 @@ public class UserSetting {
         account = account1;
         int choice;
         while (true) {
-            System.out.println("setting\ncontacts feature=" + account.isContactFeature());
-            System.out.println("1.change contacts feature status\n2.change password\n3.change card pass");
+            Print.info("setting\ncontacts feature=" + account.isContactFeature());
+            Print.menu("1.change contacts feature status\n2.change password\n3.change card pass");
             choice = UserInput.simpleMenu();
             if (choice == -1) {
                 return;
@@ -32,7 +32,7 @@ public class UserSetting {
                     break;
 
                 default:
-                    System.out.println("invalid choice");
+                    Print.erorr("invalid choice");
                     break;
             }
         }
@@ -50,7 +50,7 @@ public class UserSetting {
         String temp, cardPass = "";
         Command command;
         while (cardPass.isEmpty()) {
-            System.out.println("Enter password:");
+            Print.input("Enter password:");
             temp = syInput.nextLine();
             command = Input.checkLine(temp);
             if (command == Command.BACK) {
@@ -59,7 +59,7 @@ public class UserSetting {
             } else if (Input.isNumber(temp) && temp.length() == 4) {
                 cardPass = temp;
             } else {
-                System.out.println("invalid pass");
+                Print.erorr("invalid pass");
             }
         }
         account.changeCardPass(cardPass);

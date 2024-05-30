@@ -19,7 +19,7 @@ public class SupportInput {
     public static void menu(Support support1) {
         int choice = 0;
         while (true) {
-            System.out.println("1.verify\n2.requests\n3.list of users");
+            Print.menu("1.verify\n2.requests\n3.list of users");
             choice = UserInput.simpleMenu();
             if (choice == -1) {
                 return;
@@ -36,7 +36,7 @@ public class SupportInput {
                     inFilterUser();
                     break;
                 default:
-                    System.out.println("invalid choice");
+                    Print.erorr("invalid choice");
                     break;
             }
 
@@ -47,9 +47,9 @@ public class SupportInput {
         String temp;
         int choice = 0;
         while (true) {
-            System.out.println("requests list");
+            Print.info("requests list");
             for (int i = 0; i < DataBase.getVerifyRequests().size(); i++) {
-                System.out.println(i + 1 + " : " + DataBase.getVerifyRequests().get(i).summery());
+                Print.list(i + 1 + " : " + DataBase.getVerifyRequests().get(i).summery());
             }
             Input.printBottom();
             temp = syInput.nextLine();
@@ -57,14 +57,14 @@ public class SupportInput {
                 //menu(support,syInput);
                 return;
             } else if (!Input.isNumber(temp)) {
-                System.out.println("invalid choice");
+                Print.erorr("invalid choice");
             } else {
                 choice = Integer.parseInt(temp);
                 if (0 < choice && choice <= DataBase.getVerifyRequests().size()) {
                     checkVerify(DataBase.getVerifyRequests().get(choice - 1));
                 } else {
                     choice = 0;
-                    System.out.println("invalid choice");
+                    Print.erorr("invalid choice");
                 }
             }
         }
@@ -74,8 +74,8 @@ public class SupportInput {
         String temp;
         int choice = 0;
         while (choice == 0) {
-            System.out.println(verifyReq.toString());
-            System.out.println("1.accept\n2.reject");
+            Print.info(verifyReq.toString());
+            Print.menu("1.accept\n2.reject");
             choice = UserInput.simpleMenu();
             if (choice == -1) {
                 return;
@@ -84,7 +84,7 @@ public class SupportInput {
                 verifyReq.accept();
                 return;
             } else if (choice == 2) {
-                System.out.println("Enter the message");
+                Print.input("Enter the message");
                 temp = Input.simpleString();
                 if ("@".equals(temp)) {
                     return;
@@ -93,7 +93,7 @@ public class SupportInput {
                 return;
             } else {
                 choice = 0;
-                System.out.println("invalid choice");
+                Print.erorr("invalid choice");
             }
 
         }
@@ -119,7 +119,7 @@ public class SupportInput {
     public static long inPhoneFilter() {
         long phoneNumber = 0;
         while (true) {
-            System.out.println("Enter phone number: (if you dont want filter by phone inter 0)");
+            Print.input("Enter phone number: (if you dont want filter by phone inter 0)");
             phoneNumber = UserInput.simpleLong();
             if (phoneNumber == -1) {
                 return -1;
@@ -127,7 +127,7 @@ public class SupportInput {
             if (phoneNumber == 0) {
                 return 0;
             } else if (DataBase.findByPhone(phoneNumber) == null) {
-                System.out.println("there is not this phone number ");
+                Print.erorr("there is not this phone number ");
 
             } else {
                 return phoneNumber;
@@ -138,8 +138,8 @@ public class SupportInput {
     public static Subject inSubjectFilter() {
         int choice = 0;
         while (true) {
-            System.out.println("select subject");
-            System.out.println("1.report\n2.contacts\n3.transfer\n4.setting\n5.without filter");
+            Print.info("select subject");
+            Print.menu("1.report\n2.contacts\n3.transfer\n4.setting\n5.without filter");
             choice = UserInput.simpleMenu();
             if (choice == -1) {
                 return null;
@@ -156,7 +156,7 @@ public class SupportInput {
                 case 5:
                     return Subject.NOTHING;
                 default:
-                    System.out.println("invalid choice");
+                    Print.erorr("invalid choice");
                     break;
             }
 
@@ -166,8 +166,8 @@ public class SupportInput {
     public static Status inStatusFilter() {
         int choice = 0;
         while (true) {
-            System.out.println("select status");
-            System.out.println("1.created\n2.process\n3.closed\n4.without filter");
+            Print.info("select status");
+            Print.menu("1.created\n2.process\n3.closed\n4.without filter");
             choice = UserInput.simpleMenu();
             if (choice == -1) {
                 return null;
@@ -182,7 +182,7 @@ public class SupportInput {
                 case 4:
                     return Status.NOTHING;
                 default:
-                    System.out.println("invalid choice");
+                    Print.erorr("invalid choice");
                     break;
             }
 
@@ -196,13 +196,13 @@ public class SupportInput {
         List<SupportRequest> requests;
         while (true) {
             requests = new ArrayList<>();
-            System.out.println("list requests");
+            Print.info("list requests");
             long navId = SupportRequest.firstId;
             int counter = 1;
             for (int i = size - 1; i >= 0; i--) {
                 request = DataBase.findSuppReq(navId + i);
                 if (checkRequest(request, userPhone, status, subject)) {
-                    System.out.println(counter + "." + request.summry());
+                    Print.list(counter + "." + request.summry());
                     requests.add(request);
                     counter++;
                 }
@@ -214,7 +214,7 @@ public class SupportInput {
             if (0 < choice && choice <= size) {
                 goRequest(requests.get(choice - 1));
             } else {
-                System.out.println("invalid choice");
+                Print.erorr("invalid choice");
             }
         }
     }
@@ -233,8 +233,8 @@ public class SupportInput {
         //System.out.println(request);
         int choice = 0;
         while (true) {
-            System.out.println(request);
-            System.out.println("1.add message\n2.set status");
+            Print.info(request.toString());
+            Print.menu("1.add message\n2.set status");
             choice = UserInput.simpleMenu();
             if (choice == -1) {
                 return;
@@ -247,7 +247,7 @@ public class SupportInput {
                     setStatusReq(request);
                     break;
                 default:
-                    System.out.println("invalid choice");
+                    Print.erorr("invalid choice");
                     break;
             }
 
@@ -258,7 +258,7 @@ public class SupportInput {
         String temp, text = "";
         Command command;
         while (text.isEmpty()) {
-            System.out.println("Enter message:");
+            Print.input("Enter message:");
             temp = syInput.nextLine();
             command = Input.checkLine(temp);
             temp = temp.strip().toLowerCase();
@@ -269,14 +269,14 @@ public class SupportInput {
             }
         }
         request.addMessage(text, Sender.SUPPORT);
-        System.out.println("Message sent successfully");
+        Print.info("Message sent successfully");
     }
 
     public static void setStatusReq(SupportRequest request) {
         int choice = 0;
         while (true) {
-            System.out.println("select status");
-            System.out.println("1.created\n2.process\n3.closed");
+            Print.info("select status");
+            Print.menu("1.created\n2.process\n3.closed");
             choice = UserInput.simpleMenu();
             if (choice == -1) {
                 return;
@@ -292,7 +292,7 @@ public class SupportInput {
                     request.setStatus(Status.CLOSED);
                     return;
                 default:
-                    System.out.println("invalid choice");
+                    Print.erorr("invalid choice");
                     break;
             }
 
@@ -303,8 +303,8 @@ public class SupportInput {
         Map<Filter, String> filters = new HashMap<>();
         int choice = 0;
         while (true) {
-            System.out.println("filter user by");
-            System.out.println("1.first name\n2.last name\n3.phone number\n4.apply");
+            Print.info("filter user by");
+            Print.menu("1.first name\n2.last name\n3.phone number\n4.apply");
             choice = UserInput.simpleMenu();
             if (choice == -1) {
                 return;
@@ -318,7 +318,7 @@ public class SupportInput {
                 filterUser(filters);
                 filters = new HashMap<>();
             } else {
-                System.out.println("invalid choice");
+                Print.erorr("invalid choice");
             }
         }
     }
@@ -343,14 +343,14 @@ public class SupportInput {
         String temp, phone = "";
         Command command;
         while (phone.isEmpty()) {
-            System.out.println("Enter phone number:");
+            Print.input("Enter phone number:");
             temp = syInput.nextLine();
             command = Input.checkLine(temp);
             temp = temp.strip();
             if (command == Command.BACK) {
                 return;
             } else if (!Input.isNumber(temp)) {
-                System.out.println("invalid phone number");
+                Print.erorr("invalid phone number");
             } else {
                 phone = temp;
             }
@@ -399,11 +399,11 @@ public class SupportInput {
     }
 
     public static void showUserList(List<ComprableUser> listUser) {
-        System.out.println("list of users:");
+        Print.info("list of users:");
         int choice;
         while (true) {
             for (int i = 0; i < listUser.size(); i++) {
-                System.out.println(i + 1 + ". " + listUser.get(i).getAccount().summery());
+                Print.list(i + 1 + ". " + listUser.get(i).getAccount().summery());
             }
             choice = UserInput.simpleMenu();
             if (choice == -1) {
@@ -412,7 +412,7 @@ public class SupportInput {
             if (0 < choice && choice <= listUser.size()) {
                 showUser(listUser.get(choice - 1).getAccount());
             } else {
-                System.out.println("invalid choice");
+                Print.erorr("invalid choice");
             }
         }
     }
@@ -420,8 +420,8 @@ public class SupportInput {
     public static void showUser(Account account) {
         int choice;
         while (true) {
-            System.out.println(account);
-            System.out.println("\n1.list transactions\n2.filter tranactions");
+            Print.info(account.toString());
+            Print.menu("\n1.list transactions\n2.filter tranactions");
             choice = UserInput.simpleMenu();
             if (choice == -1) {
                 return;
@@ -434,7 +434,7 @@ public class SupportInput {
                     goFilterTra(account);
                     break;
                 default:
-                    System.out.println("invalid choice");
+                    Print.erorr("invalid choice");
                     break;
             }
         }
@@ -461,7 +461,7 @@ public class SupportInput {
             int counter = 1;
             for (Long navId : transactions) {
                 if (UserInput.filterDate(navId, minDate, maxDate)) {
-                    System.out.println(counter + ": " + DataBase.findTransaction(navId).summery());
+                    Print.list(counter + ": " + DataBase.findTransaction(navId).summery());
                     validTransaction.add(navId);
                     counter++;
                 }
@@ -473,7 +473,7 @@ public class SupportInput {
             if (0 < choice && choice <= validTransaction.size()) {
                 UserInput.showTransaction(validTransaction.get(choice - 1));
             } else {
-                System.out.println("invalid choice");
+                Print.erorr("invalid choice");
             }
         }
     }

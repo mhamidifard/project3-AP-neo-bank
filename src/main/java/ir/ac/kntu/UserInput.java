@@ -16,7 +16,7 @@ public class UserInput {
         account = account1;
         int choice = 0;
         while (true) {
-            System.out.println("menu\n1.manage account\n2.contacts\n3.trasfer\n4.support\n5.setting");
+            Print.menu("menu\n1.manage account\n2.contacts\n3.trasfer\n4.support\n5.setting");
             choice = simpleMenu();
             if (choice == -1) {
                 return;
@@ -44,7 +44,7 @@ public class UserInput {
                 break;
 
             default:
-                System.out.println("invalid choice");
+                Print.erorr("invalid choice");
                 break;
         }
     }
@@ -57,7 +57,7 @@ public class UserInput {
             if (Input.checkLine(temp) == Command.BACK) {
                 return -1;
             } else if (!Input.isNumber(temp)) {
-                System.out.println("invalid choice");
+                Print.erorr("invalid choice");
             } else {
                 return Integer.parseInt(temp);
             }
@@ -72,7 +72,7 @@ public class UserInput {
             if (Input.checkLine(temp) == Command.BACK) {
                 return -1;
             } else if (!Input.isNumber(temp)) {
-                System.out.println("invalid number");
+                Print.erorr("invalid number");
             } else {
                 return Long.parseLong(temp);
             }
@@ -82,8 +82,8 @@ public class UserInput {
     public static void manageAccount() {
         int choice = 0;
         while (true) {
-            System.out.println("manage account  " + account.getAccountNumber() + "\nbalance: " + account.getBalance());
-            System.out.println("1.charge\n2.transactions\n3.filter transactions");
+            Print.info("manage account  " + account.getAccountNumber() + "\nbalance: " + account.getBalance());
+            Print.menu("1.charge\n2.transactions\n3.filter transactions");
             choice = simpleMenu();
             if (choice == -1) {
                 return;
@@ -100,7 +100,7 @@ public class UserInput {
                     break;
 
                 default:
-                    System.out.println("invalid choice");
+                    Print.erorr("invalid choice");
                     break;
             }
 
@@ -111,19 +111,19 @@ public class UserInput {
         String temp;
         long amount = 0;
         while (amount == 0) {
-            System.out.println("Enter amount to be charged");
+            Print.input("Enter amount to be charged");
             temp = syInput.nextLine();
             if (Input.checkLine(temp) == Command.BACK) {
                 //manageAccount();
                 return;
             } else if (!Input.isNumber(temp)) {
-                System.out.println("invalid amount");
+                Print.erorr("invalid amount");
             } else {
                 amount = Long.parseLong(temp);
                 if (amount > 0) {
                     account.charge(amount);
                 } else {
-                    System.out.println("invalid amount");
+                    Print.erorr("invalid amount");
                 }
             }
         }
@@ -151,7 +151,7 @@ public class UserInput {
             int counter = 1;
             for (Long navId : transactions) {
                 if (filterDate(navId, minDate, maxDate)) {
-                    System.out.println(counter + ": " + DataBase.findTransaction(navId).summery());
+                    Print.list(counter + ": " + DataBase.findTransaction(navId).summery());
                     validTransaction.add(navId);
                     counter++;
                 }
@@ -163,7 +163,7 @@ public class UserInput {
             if (0 < choice && choice <= validTransaction.size()) {
                 showTransaction(validTransaction.get(choice - 1));
             } else {
-                System.out.println("invalid choice");
+                Print.erorr("invalid choice");
             }
         }
     }
@@ -172,7 +172,7 @@ public class UserInput {
         Instant ans;
         String temp, date;
         while (true) {
-            System.out.println("Enter " + text + " date: example(2018-02-20)");
+            Print.input("Enter " + text + " date: example(2018-02-20)");
             Input.printBottom();
             temp = syInput.nextLine();
             if (Input.checkLine(temp) == Command.BACK) {
@@ -180,7 +180,7 @@ public class UserInput {
             }
             date = temp;
 
-            System.out.println("Enter " + text + " date time: example(18:05:24)");
+            Print.input("Enter " + text + " date time: example(18:05:24)");
             Input.printBottom();
             temp = syInput.nextLine();
             if (Input.checkLine(temp) == Command.BACK) {
@@ -191,7 +191,7 @@ public class UserInput {
                 ans = Instant.parse(date);
                 return ans;
             } catch (DateTimeParseException e) {
-                System.out.println("invalid format");
+                Print.erorr("invalid format");
             }
         }
     }
@@ -208,8 +208,8 @@ public class UserInput {
     public static void goContacts() {
         int choice = 0;
         while (true) {
-            System.out.println("contacts");
-            System.out.println("1.add contact\n2.list contacts");
+            Print.info("contacts");
+            Print.menu("1.add contact\n2.list contacts");
             choice = simpleMenu();
             if (choice == -1) {
                 return;
@@ -223,7 +223,7 @@ public class UserInput {
                     break;
 
                 default:
-                    System.out.println("invalid choice");
+                    Print.erorr("invalid choice");
                     break;
             }
         }
@@ -231,7 +231,7 @@ public class UserInput {
 
     public static void addcontact() {
         String firstName, lastName;
-        System.out.println("add contact");
+        Print.info("add contact");
         firstName = Input.defineFistName();
         if ("@".equals(firstName)) {
             return;
@@ -250,17 +250,17 @@ public class UserInput {
     public static long defContactPhone() {
         long phoneNumber = 0;
         while (true) {
-            System.out.println("Enter phone number:");
+            Print.input("Enter phone number:");
             phoneNumber = simpleLong();
             if (phoneNumber == -1) {
                 return -1;
             }
             if (DataBase.findByPhone(phoneNumber) == null) {
-                System.out.println("there is not this phone number ");
+                Print.erorr("there is not this phone number ");
             } else if (account.containContact(phoneNumber)) {
-                System.out.println("contact already exists");
+                Print.erorr("contact already exists");
             } else if (phoneNumber == account.getPhoneNumber()) {
-                System.out.println("this is your phone");
+                Print.erorr("this is your phone");
             } else {
                 return phoneNumber;
             }
@@ -273,10 +273,10 @@ public class UserInput {
         while (true) {
             contactList = new ArrayList<>();
             int counter = 1;
-            System.out.println("contacts list");
+            Print.info("contacts list");
             for (Map.Entry<Long, Contact> element : account.getContactMap().entrySet()) {
                 contactList.add(element.getKey());
-                System.out.println(counter + ". " + element.getValue().summery());
+                Print.list(counter + ". " + element.getValue().summery());
                 counter++;
             }
             choice = simpleMenu();
@@ -286,7 +286,7 @@ public class UserInput {
             if (0 < choice && choice <= contactList.size()) {
                 checkContact(contactList.get(choice - 1));
             } else {
-                System.out.println("invalid choice");
+                Print.erorr("invalid choice");
             }
         }
     }
@@ -294,8 +294,8 @@ public class UserInput {
     public static void checkContact(long contactPhone) {
         int choice = -1;
         while (choice == -1) {
-            System.out.println(account.getContactMap().get(contactPhone));
-            System.out.println("1.edit\n2.remove");
+            Print.input(account.getContactMap().get(contactPhone).toString());
+            Print.menu("1.edit\n2.remove");
             choice = simpleMenu();
             if (choice == -1) {
                 return;
@@ -308,14 +308,14 @@ public class UserInput {
                 return;
             } else {
                 choice = -1;
-                System.out.println("invalid choice");
+                Print.erorr("invalid choice");
             }
         }
     }
 
     public static void editContact(long contactPhone) {
         String firstName, lastName;
-        System.out.println("edit contact");
+        Print.info("edit contact");
         firstName = Input.defineFistName();
         if ("@".equals(firstName)) {
             return;
@@ -330,7 +330,7 @@ public class UserInput {
     public static void goTransfer() {
         int choice = 0;
         while (true) {
-            System.out.println("transfer by\n1.account number\n2.contacts\n3.last transfers");
+            Print.menu("transfer by\n1.account number\n2.contacts\n3.last transfers");
             choice = simpleMenu();
             if (choice == -1) {
                 return;
@@ -348,7 +348,7 @@ public class UserInput {
 
                 default:
                     choice = 0;
-                    System.out.println("invalid choice");
+                    Print.erorr("invalid choice");
                     break;
             }
         }
@@ -357,15 +357,15 @@ public class UserInput {
     public static void inTranAccNum() {
         long toAccountNum;
         while (true) {
-            System.out.println("Enter account number:");
+            Print.input("Enter account number:");
             toAccountNum = simpleLong();
             if (toAccountNum == -1) {
                 return;
             }
             if (DataBase.findByAccNum(toAccountNum) == null) {
-                System.out.println("there is not this account number ");
+                Print.erorr("there is not this account number ");
             } else if (toAccountNum == account.getAccountNumber()) {
-                System.out.println("this is your account");
+                Print.erorr("this is your account");
             } else {
                 amountTransfer(toAccountNum);
                 return;
@@ -376,19 +376,19 @@ public class UserInput {
     public static void amountTransfer(long toAccountNum) {
         long amount;
         if (!DataBase.findByAccNum(toAccountNum).isVerifyStatus()) {
-            System.out.println("this account is not verified");
+            Print.erorr("this account is not verified");
             return;
         }
         while (true) {
-            System.out.println("Enter amount to be transferred:");
+            Print.input("Enter amount to be transferred:");
             amount = simpleLong();
             if (amount == -1) {
                 return;
             }
             if (amount < Transfer.fee) {
-                System.out.println("amount is small");
+                Print.erorr("amount is small");
             } else if (amount + Transfer.fee > account.getBalance()) {
-                System.out.println("The balance is not enough");
+                Print.erorr("The balance is not enough");
             } else {
                 checkTransfer(toAccountNum, amount);
                 return;
@@ -401,8 +401,8 @@ public class UserInput {
         String name = toAccount.getFirstName() + " " + toAccount.getLastName();
         int choice = 0;
         while (true) {
-            System.out.println("to: " + toAccountNum + " name: " + name + "\namount: " + amount);
-            System.out.println("1.confirm\n2.cancel");
+            Print.info("to: " + toAccountNum + " name: " + name + "\namount: " + amount);
+            Print.menu("1.confirm\n2.cancel");
             choice = simpleMenu();
             if (choice == -1) {
                 return;
@@ -413,7 +413,7 @@ public class UserInput {
             } else if (choice == 2) {
                 return;
             } else {
-                System.out.println("invalid choice");
+                Print.erorr("invalid choice");
             }
         }
     }
@@ -427,7 +427,7 @@ public class UserInput {
             if (Input.checkLine(temp) == Command.BACK) {
                 return;
             } else {
-                System.out.println("invalid input");
+                Print.erorr("invalid input");
             }
         }
     }
@@ -439,12 +439,12 @@ public class UserInput {
         while (true) {
             contactList = new ArrayList<>();
             int counter = 1;
-            System.out.println("contacts list");
+            Print.info("contacts list");
             for (Map.Entry<Long, Contact> element : account.getContactMap().entrySet()) {
                 toAccount = DataBase.findByAccNum(element.getValue().getAccountNumber());
                 if (toAccount.isVerifyStatus() && toAccount.isContactFeature() && toAccount.containContact(account.getPhoneNumber())) {
                     contactList.add(element.getValue().getAccountNumber());
-                    System.out.println(counter + ". " + element.getValue().summery());
+                    Print.list(counter + ". " + element.getValue().summery());
                     counter++;
                 }
             }
@@ -456,7 +456,7 @@ public class UserInput {
                 amountTransfer(contactList.get(choice - 1));
                 return;
             } else {
-                System.out.println("invalid choice");
+                Print.erorr("invalid choice");
             }
         }
 
@@ -466,7 +466,7 @@ public class UserInput {
         int choice;
         List<Long> accounts = account.getLastTransferAccs();
         for (int i = 0; i < accounts.size(); i++) {
-            System.out.println(i + 1 + ": " + accounts.get(i));
+            Print.list(i + 1 + ": " + accounts.get(i));
         }
         choice = simpleMenu();
         if (choice == -1) {
@@ -476,7 +476,7 @@ public class UserInput {
             amountTransfer(accounts.get(choice - 1));
             return;
         } else {
-            System.out.println("invalid choice");
+            Print.erorr("invalid choice");
         }
 
     }
