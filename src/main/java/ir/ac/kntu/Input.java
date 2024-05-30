@@ -24,8 +24,7 @@ public class Input {
         while (true){
             try {
                 userType();
-            }
-            catch (Exception h){
+            }catch (Exception h){
                 Print.erorr("Unknown error");
             }
         }
