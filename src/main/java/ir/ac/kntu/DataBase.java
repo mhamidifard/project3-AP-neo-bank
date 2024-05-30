@@ -37,8 +37,9 @@ public class DataBase {
         return null;
     }
 
-    public static void addUser(String firstName, String lastName, long phoneNumber, String nationalId, String password) {
-        accounts.add(new Account(firstName, lastName, phoneNumber, nationalId, password, accounts.size()));
+    public static void addUser(Account account) {
+        account.setNumberInList(accounts.size());
+        accounts.add(account);
         accounts.get(accounts.size() - 1).setDataBaseNum(accounts.size() - 1);
     }
 

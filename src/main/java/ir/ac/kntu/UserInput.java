@@ -21,28 +21,31 @@ public class UserInput {
             if (choice == -1) {
                 return;
             }
-            switch (choice) {
-                case 1:
-                    manageAccount();
-                    break;
-                case 2:
-                    goContacts();
-                    break;
-                case 3:
-                    goTransfer();
-                    break;
-                case 4:
-                    UserSupport.menu(account);
-                    break;
-                case 5:
-                    UserSetting.settingMenu(account);
-                    break;
+            switchMenu(choice);
+        }
+    }
 
-                default:
-                    choice = 0;
-                    System.out.println("invalid choice");
-                    break;
-            }
+    public static void switchMenu(int choice) {
+        switch (choice) {
+            case 1:
+                manageAccount();
+                break;
+            case 2:
+                goContacts();
+                break;
+            case 3:
+                goTransfer();
+                break;
+            case 4:
+                UserSupport.menu(account);
+                break;
+            case 5:
+                UserSetting.settingMenu(account);
+                break;
+
+            default:
+                System.out.println("invalid choice");
+                break;
         }
     }
 

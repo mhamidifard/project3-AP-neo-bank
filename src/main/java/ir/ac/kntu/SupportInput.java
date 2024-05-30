@@ -1,6 +1,7 @@
 package ir.ac.kntu;
 
 import ir.ac.kntu.util.ComprableUser;
+
 import java.time.Instant;
 import java.util.*;
 
@@ -10,45 +11,35 @@ enum Filter {
 
 public class SupportInput {
     private static Scanner syInput;
-    private static Support support;
 
     public static void setSyInput(Scanner syInput) {
         SupportInput.syInput = syInput;
     }
 
     public static void menu(Support support1) {
-        support = support1;
-        String temp;
-
         int choice = 0;
         while (true) {
             System.out.println("1.verify\n2.requests\n3.list of users");
-            Input.printBottom();
-            temp = syInput.nextLine();
-            if (Input.checkLine(temp) == Command.BACK) {
-                //Input.goSupport();
-                choice = -1;
+            choice = UserInput.simpleMenu();
+            if (choice == -1) {
                 return;
-            } else if (!Input.isNumber(temp)) {
-                System.out.println("invalid choice");
-            } else {
-                choice = Integer.parseInt(temp);
-                switch (choice) {
-                    case 1:
-                        verifylist();
-                        break;
-                    case 2:
-                        inFilterReq();
-                        break;
-                    case 3:
-                        inFilterUser();
-                        break;
-                    default:
-                        choice = 0;
-                        System.out.println("invalid choice");
-                        break;
-                }
             }
+
+            switch (choice) {
+                case 1:
+                    verifylist();
+                    break;
+                case 2:
+                    inFilterReq();
+                    break;
+                case 3:
+                    inFilterUser();
+                    break;
+                default:
+                    System.out.println("invalid choice");
+                    break;
+            }
+
         }
     }
 
@@ -80,41 +71,31 @@ public class SupportInput {
     }
 
     public static void checkVerify(VerificationRequest verifyReq) {
-
         String temp;
         int choice = 0;
         while (choice == 0) {
             System.out.println(verifyReq.toString());
             System.out.println("1.accept\n2.reject");
-            Input.printBottom();
-            temp = syInput.nextLine();
-            if (Input.checkLine(temp) == Command.BACK) {
-                //verifylist();
+            choice = UserInput.simpleMenu();
+            if (choice == -1) {
                 return;
-            } else if (!Input.isNumber(temp)) {
-                System.out.println("invalid choice");
-            } else {
-                choice = Integer.parseInt(temp);
-                if (choice == 1) {
-                    verifyReq.accept();
-                    //verifylist();
-                    return;
-                } else if (choice == 2) {
-                    System.out.println("Enter the message");
-                    Input.printBottom();
-                    temp = syInput.nextLine();
-                    if (Input.checkLine(temp) == Command.BACK) {
-                        //verifylist();
-                        return;
-                    }
-                    verifyReq.reject(temp);
-                    //verifylist();
-                    return;
-                } else {
-                    choice = 0;
-                    System.out.println("invalid choice");
-                }
             }
+            if (choice == 1) {
+                verifyReq.accept();
+                return;
+            } else if (choice == 2) {
+                System.out.println("Enter the message");
+                temp = Input.simpleString();
+                if ("@".equals(temp)) {
+                    return;
+                }
+                verifyReq.reject(temp);
+                return;
+            } else {
+                choice = 0;
+                System.out.println("invalid choice");
+            }
+
         }
     }
 

@@ -21,19 +21,18 @@ public class Account {
     private List<Long> supportRequests = new ArrayList<>();
 
 
-    public Account(String firstName, String lastName, long phoneNumber, String nationalId, String password, int numberInList) {
+    public Account(String firstName, String lastName, long phoneNumber, String nationalId, String password) {
         setFirstName(firstName);
         setLastName(lastName);
         setPhoneNumber(phoneNumber);
         setNationalId(nationalId);
         setPasswordHash(password);
-        setNumberInList(numberInList);
     }
 
     public void verify() {
         setVerifyStatus(true);
         setAccountNumber();
-        card=new Card(accountNumber);
+        card = new Card(accountNumber);
     }
 
     public void addContact(String firstName, String lastName, long phoneNumber) {
@@ -74,7 +73,7 @@ public class Account {
     public long doTransfer(long toAccountNum, long amount) {
         Account toAccountObj = DataBase.findByAccNum(toAccountNum);
         toAccountObj.setBalance(toAccountObj.getBalance() + amount);
-        setBalance(balance - amount-Transfer.fee);
+        setBalance(balance - amount - Transfer.fee);
         long navId = DataBase.addTransfer(amount, accountNumber, toAccountNum);
         addTransferToList(navId);
         toAccountObj.addTransferToList(navId);
@@ -87,11 +86,11 @@ public class Account {
         transactions.add(navId);
     }
 
-    public void addSuppReq(long navId){
+    public void addSuppReq(long navId) {
         supportRequests.add(navId);
     }
 
-    public void changeCardPass(String pass){
+    public void changeCardPass(String pass) {
         card.setHashCardPass(pass);
     }
 
@@ -225,12 +224,12 @@ public class Account {
     }
 
     @Override
-    public String toString(){
-        return "first name: "+firstName+" last name: "+lastName+
-                "\nphone: "+phoneNumber+" account number: "+accountNumber;
+    public String toString() {
+        return "first name: " + firstName + " last name: " + lastName +
+                "\nphone: " + phoneNumber + " account number: " + accountNumber;
     }
 
-    public String summery(){
-        return firstName+" "+lastName+" phone: "+phoneNumber;
+    public String summery() {
+        return firstName + " " + lastName + " phone: " + phoneNumber;
     }
 }

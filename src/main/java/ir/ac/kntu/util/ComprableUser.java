@@ -40,8 +40,8 @@ public class ComprableUser implements Comparable{
     }
 
     @Override
-    public int compareTo(Object o) {
-        ComprableUser other=(ComprableUser) o;
+    public int compareTo(Object obj) {
+        ComprableUser other=(ComprableUser) obj;
         return this.length -other.length;
     }
 }
