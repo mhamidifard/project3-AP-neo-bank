@@ -34,7 +34,7 @@ public class UserInput {
                 goContacts();
                 break;
             case 3:
-                goTransfer();
+                TransferInput.goTransfer(account);
                 break;
             case 4:
                 UserSupport.menu(account);
@@ -327,96 +327,13 @@ public class UserInput {
         account.editContact(contactPhone, firstName, lastName);
     }
 
-    public static void goTransfer() {
-        int choice = 0;
-        while (true) {
-            Print.menu("transfer by\n1.account number\n2.contacts\n3.last transfers");
-            choice = simpleMenu();
-            if (choice == -1) {
-                return;
-            }
-            switch (choice) {
-                case 1:
-                    inTranAccNum();
-                    break;
-                case 2:
-                    inTranContact();
-                    break;
-                case 3:
-                    inTranLast();
-                    break;
 
-                default:
-                    choice = 0;
-                    Print.erorr("invalid choice");
-                    break;
-            }
-        }
-    }
 
-    public static void inTranAccNum() {
-        long toAccountNum;
-        while (true) {
-            Print.input("Enter account number:");
-            toAccountNum = simpleLong();
-            if (toAccountNum == -1) {
-                return;
-            }
-            if (DataBase.findByAccNum(toAccountNum) == null) {
-                Print.erorr("there is not this account number ");
-            } else if (toAccountNum == account.getAccountNumber()) {
-                Print.erorr("this is your account");
-            } else {
-                amountTransfer(toAccountNum);
-                return;
-            }
-        }
-    }
 
-    public static void amountTransfer(long toAccountNum) {
-        long amount;
-        if (!DataBase.findByAccNum(toAccountNum).isVerifyStatus()) {
-            Print.erorr("this account is not verified");
-            return;
-        }
-        while (true) {
-            Print.input("Enter amount to be transferred:");
-            amount = simpleLong();
-            if (amount == -1) {
-                return;
-            }
-            if (amount < Transfer.fee) {
-                Print.erorr("amount is small");
-            } else if (amount + Transfer.fee > account.getBalance()) {
-                Print.erorr("The balance is not enough");
-            } else {
-                checkTransfer(toAccountNum, amount);
-                return;
-            }
-        }
-    }
 
-    public static void checkTransfer(long toAccountNum, long amount) {
-        Account toAccount = DataBase.findByAccNum(toAccountNum);
-        String name = toAccount.getFirstName() + " " + toAccount.getLastName();
-        int choice = 0;
-        while (true) {
-            Print.info("to: " + toAccountNum + " name: " + name + "\namount: " + amount);
-            Print.menu("1.confirm\n2.cancel");
-            choice = simpleMenu();
-            if (choice == -1) {
-                return;
-            } else if (choice == 1) {
-                long navId = account.doTransfer(toAccountNum, amount);
-                showTransaction(navId);
-                return;
-            } else if (choice == 2) {
-                return;
-            } else {
-                Print.erorr("invalid choice");
-            }
-        }
-    }
+
+
+
 
     public static void showTransaction(long navId) {
         DataBase.printTransaction(navId, account);
@@ -432,53 +349,8 @@ public class UserInput {
         }
     }
 
-    public static void inTranContact() {
-        int choice;
-        ArrayList<Long> contactList;
-        Account toAccount;
-        while (true) {
-            contactList = new ArrayList<>();
-            int counter = 1;
-            Print.info("contacts list");
-            for (Map.Entry<Long, Contact> element : account.getContactMap().entrySet()) {
-                toAccount = DataBase.findByAccNum(element.getValue().getAccountNumber());
-                if (toAccount.isVerifyStatus() && toAccount.isContactFeature() && toAccount.containContact(account.getPhoneNumber())) {
-                    contactList.add(element.getValue().getAccountNumber());
-                    Print.list(counter + ". " + element.getValue().summery());
-                    counter++;
-                }
-            }
-            choice = simpleMenu();
-            if (choice == -1) {
-                return;
-            }
-            if (0 < choice && choice <= contactList.size()) {
-                amountTransfer(contactList.get(choice - 1));
-                return;
-            } else {
-                Print.erorr("invalid choice");
-            }
-        }
 
-    }
 
-    public static void inTranLast() {
-        int choice;
-        List<Long> accounts = account.getLastTransferAccs();
-        for (int i = 0; i < accounts.size(); i++) {
-            Print.list(i + 1 + ": " + accounts.get(i));
-        }
-        choice = simpleMenu();
-        if (choice == -1) {
-            return;
-        }
-        if (0 < choice && choice <= accounts.size()) {
-            amountTransfer(accounts.get(choice - 1));
-            return;
-        } else {
-            Print.erorr("invalid choice");
-        }
 
-    }
 
 }

@@ -11,6 +11,9 @@ public class DataBase {
 
 
     public static Account findByAccNum(long accNum) {
+        if(accNum==0){
+            return null;
+        }
         for (Account user : accounts) {
             if (user.getAccountNumber() == accNum) {
                 return user;
@@ -19,7 +22,22 @@ public class DataBase {
         return null;
     }
 
+    public static Account findByCardNum(long cardNum) {
+        if(cardNum==0){
+            return null;
+        }
+        for (Account user : accounts) {
+            if (user.getCardNumber() == cardNum) {
+                return user;
+            }
+        }
+        return null;
+    }
+
     public static Account findByPhone(long phone) {
+        if(phone==0){
+            return null;
+        }
         for (Account user : accounts) {
             if (user.getPhoneNumber() == phone) {
                 return user;
@@ -102,8 +120,8 @@ public class DataBase {
         return charge.getNavId();
     }
 
-    public static long addTransfer(long amount, long fromAccount, long toAccount) {
-        Transfer transfer = new Transfer(amount, fromAccount, toAccount);
+    public static long addTransfer(long amount, long fromAccount, long toAccount,TransferType transferType) {
+        Transfer transfer = new Transfer(amount, fromAccount, toAccount,transferType);
         transactions.put(transfer.getNavId(), transfer);
         return transfer.getNavId();
     }

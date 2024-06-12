@@ -26,6 +26,7 @@ public class Input {
                 userType();
             }catch (Exception h){
                 Print.erorr("Unknown error");
+                h.printStackTrace();
             }
         }
 

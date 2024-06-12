@@ -17,7 +17,7 @@ public class Account {
     private Card card;
     private List<Long> transactions = new ArrayList<>();
     private Map<Long, Contact> contactMap = new HashMap<>();
-    private List<Long> lastTransferAccs = new LinkedList<>();
+    private List<LastTransfer> lastTransferAccs = new LinkedList<>();
     private List<Long> supportRequests = new ArrayList<>();
 
 
@@ -70,17 +70,54 @@ public class Account {
         transactions.add(DataBase.addCharge(value, getAccountNumber()));
     }
 
-    public long doTransfer(long toAccountNum, long amount) {
+    public void doTransfer(long toAccountNum, long amount,long navId) {
         Account toAccountObj = DataBase.findByAccNum(toAccountNum);
-        toAccountObj.setBalance(toAccountObj.getBalance() + amount);
-        setBalance(balance - amount - Transfer.fee);
-        long navId = DataBase.addTransfer(amount, accountNumber, toAccountNum);
         addTransferToList(navId);
-        toAccountObj.addTransferToList(navId);
-        lastTransferAccs.remove(toAccountNum);
-        lastTransferAccs.addFirst(toAccountNum);
+        if (toAccountObj!=null){
+            toAccountObj.setBalance(toAccountObj.getBalance() + amount);
+            toAccountObj.addTransferToList(navId);
+        }
+//        lastTransferAccs.remove(toAccountNum);
+//        //lastTransferAccs.addFirst(toAccountNum);
+//        lastTransferAccs.add(0,toAccountNum);
+    }
+
+    public void updateListTransfer(long accNum,long cardNum){
+        LastTransfer transfer=new LastTransfer(accNum,cardNum);
+        lastTransferAccs.remove(transfer);
+        lastTransferAccs.add(0,transfer);
+    }
+
+    public long doCardTo(long toCardNum, long amount){
+        long navId = DataBase.addTransfer(amount, accountNumber, toCardNum,TransferType.CardToCard);
+        setBalance(balance - amount - Admin.getCardToFee());
+        doTransfer(toCardNum,amount,navId);
         return navId;
     }
+
+    public long doPol(long toAccNum, long amount){
+        long navId = DataBase.addTransfer(amount, accountNumber, toAccNum,TransferType.POL);
+        setBalance(balance - amount - (Admin.getPolFee()*amount)/100);
+        doTransfer(toAccNum,amount,navId);
+        return navId;
+    }
+
+    public long doPaya(long toAccNum, long amount){
+        long navId = DataBase.addTransfer(amount, accountNumber, toAccNum,TransferType.PAYA);
+        setBalance(balance - amount - Admin.getPayaFee());
+        doTransfer(toAccNum,amount,navId);
+        return navId;
+    }
+
+    public long doFariTo(long toAccNum, long amount){
+        long navId = DataBase.addTransfer(amount, accountNumber, toAccNum,TransferType.FARITOFARI);
+        setBalance(balance - amount - Admin.getFariToFee());
+        doTransfer(toAccNum,amount,navId);
+        return navId;
+    }
+
+
+
 
     public void addTransferToList(long navId) {
         transactions.add(navId);
@@ -92,6 +129,10 @@ public class Account {
 
     public void changeCardPass(String pass) {
         card.setHashCardPass(pass);
+    }
+
+    public long getCardNumber(){
+        return card.getCardNumber();
     }
 
     public long getPhoneNumber() {
@@ -207,11 +248,11 @@ public class Account {
         this.numberInList = numberInList;
     }
 
-    public List<Long> getLastTransferAccs() {
+    public List<LastTransfer> getLastTransferAccs() {
         return lastTransferAccs;
     }
 
-    public void setLastTransferAccs(List<Long> lastTransferAccs) {
+    public void setLastTransferAccs(List<LastTransfer> lastTransferAccs) {
         this.lastTransferAccs = lastTransferAccs;
     }
 
