@@ -5,7 +5,7 @@ import ir.ac.kntu.util.Calendar;
 import java.time.Instant;
 
 enum TraType {
-    TRANSFER, CHARGE,BOXTRANSACTION;
+    TRANSFER, CHARGE,BOXTRANSACTION,SIMCHARGE;
 }
 
 public abstract class Transaction {

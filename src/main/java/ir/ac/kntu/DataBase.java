@@ -9,6 +9,7 @@ public class DataBase {
     private static List<VerificationRequest> verifyRequests = new LinkedList<>();
     private static Map<Long, SupportRequest> supportRequests = new HashMap<>();
     private static List<RewardBox> rewardBoxes = new ArrayList<>();
+    private static Map<Long,Long> simS=new HashMap<>();
 
 
     public static Account findByAccNum(long accNum) {
@@ -158,7 +159,17 @@ public class DataBase {
         rewardBoxes.remove(box);
     }
 
+    public static void addChargeSim(long phone,long amount){
+        if(simS.containsKey(phone)){
+            simS.put(phone,simS.get(phone)+amount);
+        }else {
+            simS.put(phone,amount);
+        }
+    }
 
+    public static long getChargeSim(long phone){
+        return simS.getOrDefault(phone,0L);
+    }
 
     public static void setAccounts(List<Account> accounts) {
         DataBase.accounts = accounts;
@@ -194,5 +205,21 @@ public class DataBase {
 
     public static void setSupportRequests(Map<Long, SupportRequest> supportRequests) {
         DataBase.supportRequests = supportRequests;
+    }
+
+    public static Map<Long, Long> getSimS() {
+        return simS;
+    }
+
+    public static void setSimS(Map<Long, Long> simS) {
+        DataBase.simS = simS;
+    }
+
+    public static List<RewardBox> getRewardBoxes() {
+        return rewardBoxes;
+    }
+
+    public static void setRewardBoxes(List<RewardBox> rewardBoxes) {
+        DataBase.rewardBoxes = rewardBoxes;
     }
 }

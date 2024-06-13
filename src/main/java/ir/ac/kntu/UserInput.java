@@ -16,7 +16,7 @@ public class UserInput {
         account = account1;
         int choice = 0;
         while (true) {
-            Print.menu("menu\n1.manage account\n2.contacts\n3.trasfer\n4.support\n5.setting");
+            Print.menu("menu\n1.manage account\n2.contacts\n3.trasfer\n4.sim charge\n5.support\n6.setting");
             choice = simpleMenu();
             if (choice == -1) {
                 return;
@@ -37,9 +37,12 @@ public class UserInput {
                 TransferInput.goTransfer(account);
                 break;
             case 4:
-                UserSupport.menu(account);
+                goSimCharge();
                 break;
             case 5:
+                UserSupport.menu(account);
+                break;
+            case 6:
                 UserSetting.settingMenu(account);
                 break;
 
@@ -82,7 +85,7 @@ public class UserInput {
     public static void manageAccount() {
         int choice = 0;
         while (true) {
-            Print.info("manage account  " + account.getAccountNumber() + "\nbalance: " + account.getBalance());
+            Print.info("manage account  " + account.getAccountNumber() + "\nbalance: " + account.getBalance()+"\nsim charge: "+account.getSimCharge());
             Print.menu("1.charge\n2.boxes\n3.transactions\n4.filter transactions");
             choice = simpleMenu();
             if (choice == -1) {
@@ -348,6 +351,110 @@ public class UserInput {
                 return;
             } else {
                 Print.erorr("invalid input");
+            }
+        }
+    }
+
+    public static void goSimCharge(){
+        int choice = 0;
+        while (true) {
+            Print.menu("buy sim charge\n1.my phone number\n2.contacts\n3.enter phone number");
+            choice = UserInput.simpleMenu();
+            if (choice == -1) {
+                return;
+            }
+            switch (choice) {
+                case 1:
+                    chargePhone(account.getPhoneNumber());
+                    break;
+                case 2:
+                    chargeContact();
+                    break;
+                case 3:
+                    inPhoneCharge();
+                    break;
+
+
+                default:
+                    Print.erorr("invalid choice");
+                    break;
+            }
+        }
+    }
+
+    public static void inPhoneCharge(){
+        long phoneNumber = 0;
+        while (true) {
+            Print.input("Enter phone number:");
+            phoneNumber = simpleLong();
+            if (phoneNumber == -1) {
+                return;
+            }
+            if (Long.toString(phoneNumber).length()==10 && Long.toString(phoneNumber).charAt(0)=='9') {
+                chargePhone(phoneNumber);
+                return;
+            } else {
+                Print.erorr("invalid phone number");
+            }
+        }
+    }
+
+    public static void chargePhone(long phone){
+        long amount;
+        while (true) {
+            Print.input("Enter amount to be charged:");
+            amount = UserInput.simpleLong();
+            if (amount == -1) {
+                return;
+            }
+            if (amount < 1000) {
+                Print.erorr("amount is small");
+            }else if(amount+amount*Admin.getSimChargeFee()/100>account.getBalance()){
+                Print.erorr("balance does not enough");
+            }else {
+                confirmPhoneCharge(phone,amount);
+                return;
+            }
+        }
+    }
+
+    public static void chargeContact(){
+        int choice;
+        ArrayList<Long> contactList;
+        while (true) {
+            contactList = new ArrayList<>();
+            int counter = 1;
+            Print.info("contacts list");
+            for (Map.Entry<Long, Contact> element : account.getContactMap().entrySet()) {
+                contactList.add(element.getKey());
+                Print.list(counter + ". " + element.getValue().summery());
+                counter++;
+            }
+            choice = simpleMenu();
+            if (choice == -1) {
+                return;
+            }
+            if (0 < choice && choice <= contactList.size()) {
+                chargePhone(account.getContactMap().get(contactList.get(choice - 1)).getPhoneNumber());
+            } else {
+                Print.erorr("invalid choice");
+            }
+        }
+    }
+
+    public static void confirmPhoneCharge(long phone,long amount){
+        int choice = 0;
+        while (true) {
+            Print.info("phone: " + phone + "    amount: " + amount);
+            Print.menu("1.confirm\n2.cancel");
+            choice = UserInput.simpleMenu();
+            if (choice == -1 || choice == 2) {
+                return;
+            } else if (choice == 1) {
+                account.chargeSim(phone,amount);
+                return;
+            } else {
+                Print.erorr("invalid choice");
             }
         }
     }

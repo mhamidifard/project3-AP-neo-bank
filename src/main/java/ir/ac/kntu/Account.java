@@ -82,7 +82,6 @@ public class Account {
 //        lastTransferAccs.remove(toAccountNum);
 //        //lastTransferAccs.addFirst(toAccountNum);
 //        lastTransferAccs.add(0,toAccountNum);
-        checkSmallBox(amount);
     }
 
     public void updateListTransfer(long accNum, long cardNum) {
@@ -95,6 +94,7 @@ public class Account {
         long navId = DataBase.addTransfer(amount, accountNumber, toCardNum, TransferType.CardToCard);
         setBalance(balance - amount - Admin.getCardToFee());
         doTransfer(toCardNum, amount, navId);
+        checkSmallBox(amount + Admin.getCardToFee());
         return navId;
     }
 
@@ -102,6 +102,7 @@ public class Account {
         long navId = DataBase.addTransfer(amount, accountNumber, toAccNum, TransferType.POL);
         setBalance(balance - amount - (Admin.getPolFee() * amount) / 100);
         doTransfer(toAccNum, amount, navId);
+        checkSmallBox(amount + (Admin.getPolFee() * amount) / 100);
         return navId;
     }
 
@@ -109,6 +110,7 @@ public class Account {
         long navId = DataBase.addTransfer(amount, accountNumber, toAccNum, TransferType.PAYA);
         setBalance(balance - amount - Admin.getPayaFee());
         doTransfer(toAccNum, amount, navId);
+        checkSmallBox(amount + Admin.getPayaFee());
         return navId;
     }
 
@@ -116,6 +118,7 @@ public class Account {
         long navId = DataBase.addTransfer(amount, accountNumber, toAccNum, TransferType.FARITOFARI);
         setBalance(balance - amount - Admin.getFariToFee());
         doTransfer(toAccNum, amount, navId);
+        checkSmallBox(amount + Admin.getFariToFee());
         return navId;
     }
 
@@ -184,6 +187,18 @@ public class Account {
             return;
         }
         deposit(smallMoneyBox, amount);
+    }
+
+    public void chargeSim(long phoneNumber,long amount){
+        balance-=(amount+amount*Admin.getSimChargeFee()/100);
+        DataBase.addChargeSim(phoneNumber,amount);
+        Long navId = DataBase.addTransaction(new TraSimCharge(amount,phoneNumber,accountNumber));
+        transactions.add(navId);
+        checkSmallBox(amount+amount*Admin.getSimChargeFee()/100);
+    }
+
+    public long getSimCharge(){
+        return DataBase.getChargeSim(phoneNumber);
     }
 
     public long getCardNumber() {

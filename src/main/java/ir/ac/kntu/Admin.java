@@ -9,6 +9,7 @@ public class Admin {
     private static long polFee=2L;
     private static long payaFee=300L;
     private static long fariToFee=0L;
+    private static long simChargeFee=10L;
 
     public static long getCardToMax() {
         return cardToMax;
@@ -72,5 +73,13 @@ public class Admin {
 
     public static void setFariToFee(long fariToFee) {
         Admin.fariToFee = fariToFee;
+    }
+
+    public static long getSimChargeFee() {
+        return simChargeFee;
+    }
+
+    public static void setSimChargeFee(long simChargeFee) {
+        Admin.simChargeFee = simChargeFee;
     }
 }
