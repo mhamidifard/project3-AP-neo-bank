@@ -4,7 +4,7 @@ public class Admin {
     private static long cardToMax=100000L;
     private static long polMax=5000000L;
     private static long payaMax=5000000L;
-    private static long fariToMax=8000000L;
+    private static long fariToMax=16000000L;
     private static long cardToFee=300L;
     private static long polFee=2L;
     private static long payaFee=300L;

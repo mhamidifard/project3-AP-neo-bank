@@ -1,17 +1,26 @@
 package ir.ac.kntu;
 
 
-
-import java.time.Instant;
-
 enum TypeBox{
-    SAVING,SMALLMONEY,REWARD;
+    SIMPLE,SMALLMONEY,REWARD;
 }
 public class Box {
     private Long balance;
     private TypeBox type;
-    private Instant date;
 
+
+    public Box(Long balance, TypeBox type) {
+        this.balance = balance;
+        this.type = type;
+    }
+
+    public void withdraw(long amount){
+        balance -= amount;
+    }
+
+    public void deposit(long amount){
+        balance += amount;
+    }
 
     public Long getBalance() {
         return balance;
@@ -29,11 +38,13 @@ public class Box {
         this.type = type;
     }
 
-    public Instant getDate() {
-        return date;
+    public String summery(){
+        return type+"  "+balance;
     }
 
-    public void setDate(Instant date) {
-        this.date = date;
+    @Override
+    public String toString() {
+        return  type+
+                "\nbalance=" + balance;
     }
 }

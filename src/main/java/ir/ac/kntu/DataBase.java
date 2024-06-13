@@ -8,6 +8,7 @@ public class DataBase {
     private static Map<Long, Transaction> transactions = new HashMap<>();
     private static List<VerificationRequest> verifyRequests = new LinkedList<>();
     private static Map<Long, SupportRequest> supportRequests = new HashMap<>();
+    private static List<RewardBox> rewardBoxes = new ArrayList<>();
 
 
     public static Account findByAccNum(long accNum) {
@@ -126,6 +127,11 @@ public class DataBase {
         return transfer.getNavId();
     }
 
+    public static long addTransaction(Transaction transaction){
+        transactions.put(transaction.getNavId(),transaction);
+        return transaction.getNavId();
+    }
+
     public static void printTransaction(long navId, Account account) {
         Print.info(transactions.get(navId).toStringComplete(account));
     }
@@ -143,6 +149,15 @@ public class DataBase {
         supportRequests.put(request.getNavId(), request);
         return request;
     }
+
+    public static void addRewardBox(RewardBox box){
+        rewardBoxes.add(box);
+    }
+
+    public static void removeRewardBox(RewardBox box){
+        rewardBoxes.remove(box);
+    }
+
 
 
     public static void setAccounts(List<Account> accounts) {

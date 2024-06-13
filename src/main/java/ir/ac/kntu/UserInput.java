@@ -71,7 +71,7 @@ public class UserInput {
             temp = syInput.nextLine();
             if (Input.checkLine(temp) == Command.BACK) {
                 return -1;
-            } else if (!Input.isNumber(temp)) {
+            } else if (!Input.isNumber(temp) || Long.parseLong(temp)==0) {
                 Print.erorr("invalid number");
             } else {
                 return Long.parseLong(temp);
@@ -83,7 +83,7 @@ public class UserInput {
         int choice = 0;
         while (true) {
             Print.info("manage account  " + account.getAccountNumber() + "\nbalance: " + account.getBalance());
-            Print.menu("1.charge\n2.transactions\n3.filter transactions");
+            Print.menu("1.charge\n2.boxes\n3.transactions\n4.filter transactions");
             choice = simpleMenu();
             if (choice == -1) {
                 return;
@@ -93,9 +93,12 @@ public class UserInput {
                     charge();
                     break;
                 case 2:
-                    listTransactions(null, null);
+                    BoxInput.goBoxes(account);
                     break;
                 case 3:
+                    listTransactions(null, null);
+                    break;
+                case 4:
                     goFilterTra();
                     break;
 

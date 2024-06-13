@@ -5,7 +5,7 @@ import ir.ac.kntu.util.Calendar;
 import java.time.Instant;
 
 enum TraType {
-    TRANSFER, CHARGE;
+    TRANSFER, CHARGE,BOXTRANSACTION;
 }
 
 public abstract class Transaction {
@@ -61,7 +61,7 @@ public abstract class Transaction {
     }
 
     public  String summery(){
-        return type+"  nav id: "+getNavId()+" date: "+getDate();
+        return type+"   value: "+getValue()+"  nav id: "+getNavId()+" date: "+getDate();
     }
 
     public abstract String toStringComplete(Account account);

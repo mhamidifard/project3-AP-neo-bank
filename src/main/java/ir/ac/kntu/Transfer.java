@@ -43,7 +43,6 @@ public class Transfer extends Transaction{
         if(transferType==TransferType.PAYA){
             setTransferStatus(TransferStatus.PENDING);
         }
-
     }
 
 

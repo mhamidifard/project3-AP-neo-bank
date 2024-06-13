@@ -19,6 +19,8 @@ public class Account {
     private Map<Long, Contact> contactMap = new HashMap<>();
     private List<LastTransfer> lastTransferAccs = new LinkedList<>();
     private List<Long> supportRequests = new ArrayList<>();
+    private Box smallMoneyBox;
+    private List<Box> boxes = new ArrayList<>();
 
 
     public Account(String firstName, String lastName, long phoneNumber, String nationalId, String password) {
@@ -70,53 +72,52 @@ public class Account {
         transactions.add(DataBase.addCharge(value, getAccountNumber()));
     }
 
-    public void doTransfer(long toAccountNum, long amount,long navId) {
+    public void doTransfer(long toAccountNum, long amount, long navId) {
         Account toAccountObj = DataBase.findByAccNum(toAccountNum);
         addTransferToList(navId);
-        if (toAccountObj!=null){
+        if (toAccountObj != null) {
             toAccountObj.setBalance(toAccountObj.getBalance() + amount);
             toAccountObj.addTransferToList(navId);
         }
 //        lastTransferAccs.remove(toAccountNum);
 //        //lastTransferAccs.addFirst(toAccountNum);
 //        lastTransferAccs.add(0,toAccountNum);
+        checkSmallBox(amount);
     }
 
-    public void updateListTransfer(long accNum,long cardNum){
-        LastTransfer transfer=new LastTransfer(accNum,cardNum);
+    public void updateListTransfer(long accNum, long cardNum) {
+        LastTransfer transfer = new LastTransfer(accNum, cardNum);
         lastTransferAccs.remove(transfer);
-        lastTransferAccs.add(0,transfer);
+        lastTransferAccs.add(0, transfer);
     }
 
-    public long doCardTo(long toCardNum, long amount){
-        long navId = DataBase.addTransfer(amount, accountNumber, toCardNum,TransferType.CardToCard);
+    public long doCardTo(long toCardNum, long amount) {
+        long navId = DataBase.addTransfer(amount, accountNumber, toCardNum, TransferType.CardToCard);
         setBalance(balance - amount - Admin.getCardToFee());
-        doTransfer(toCardNum,amount,navId);
+        doTransfer(toCardNum, amount, navId);
         return navId;
     }
 
-    public long doPol(long toAccNum, long amount){
-        long navId = DataBase.addTransfer(amount, accountNumber, toAccNum,TransferType.POL);
-        setBalance(balance - amount - (Admin.getPolFee()*amount)/100);
-        doTransfer(toAccNum,amount,navId);
+    public long doPol(long toAccNum, long amount) {
+        long navId = DataBase.addTransfer(amount, accountNumber, toAccNum, TransferType.POL);
+        setBalance(balance - amount - (Admin.getPolFee() * amount) / 100);
+        doTransfer(toAccNum, amount, navId);
         return navId;
     }
 
-    public long doPaya(long toAccNum, long amount){
-        long navId = DataBase.addTransfer(amount, accountNumber, toAccNum,TransferType.PAYA);
+    public long doPaya(long toAccNum, long amount) {
+        long navId = DataBase.addTransfer(amount, accountNumber, toAccNum, TransferType.PAYA);
         setBalance(balance - amount - Admin.getPayaFee());
-        doTransfer(toAccNum,amount,navId);
+        doTransfer(toAccNum, amount, navId);
         return navId;
     }
 
-    public long doFariTo(long toAccNum, long amount){
-        long navId = DataBase.addTransfer(amount, accountNumber, toAccNum,TransferType.FARITOFARI);
+    public long doFariTo(long toAccNum, long amount) {
+        long navId = DataBase.addTransfer(amount, accountNumber, toAccNum, TransferType.FARITOFARI);
         setBalance(balance - amount - Admin.getFariToFee());
-        doTransfer(toAccNum,amount,navId);
+        doTransfer(toAccNum, amount, navId);
         return navId;
     }
-
-
 
 
     public void addTransferToList(long navId) {
@@ -131,7 +132,61 @@ public class Account {
         card.setHashCardPass(pass);
     }
 
-    public long getCardNumber(){
+    public void addBox(Box box) {
+        boxes.add(box);
+        if (box.getType() == TypeBox.REWARD) {
+            RewardBox rewardBox = (RewardBox) box;
+            rewardBox.setAccount(this);
+            DataBase.addRewardBox(rewardBox);
+        }
+        if (box.getType() == TypeBox.SMALLMONEY) {
+            smallMoneyBox = box;
+        }
+        Print.info("box added successfully");
+    }
+
+    public void removeBox(Box box) {
+        boxes.remove(box);
+        if (box.getType() == TypeBox.REWARD) {
+            DataBase.removeRewardBox((RewardBox) box);
+        }
+        if (box.getType() == TypeBox.SMALLMONEY) {
+            smallMoneyBox = null;
+        }
+    }
+
+    public void withdraw(Box box, long amount) {
+        balance += amount;
+        box.withdraw(amount);
+        Long navId = DataBase.addTransaction(new TraBox(amount, accountNumber, BoxAction.WITHDRAW));
+        transactions.add(navId);
+    }
+
+    public void deposit(Box box, long amount) {
+        if (box == null) {
+            return;
+        }
+        balance -= amount;
+        box.deposit(amount);
+        Long navId = DataBase.addTransaction(new TraBox(amount, accountNumber, BoxAction.DEPOSIT));
+        transactions.add(navId);
+    }
+
+    public void checkSmallBox(long money) {
+        if (smallMoneyBox == null) {
+            return;
+        }
+        int digitSize = Long.toString(money).length() * 3 / 4;
+        long base = Helper.pow(10, digitSize);
+        money = money % base;
+        long amount = base - money;
+        if (amount > balance) {
+            return;
+        }
+        deposit(smallMoneyBox, amount);
+    }
+
+    public long getCardNumber() {
         return card.getCardNumber();
     }
 
@@ -262,6 +317,22 @@ public class Account {
 
     public void setSupportRequests(List<Long> supportRequests) {
         this.supportRequests = supportRequests;
+    }
+
+    public Box getSmallMoneyBox() {
+        return smallMoneyBox;
+    }
+
+    public void setSmallMoneyBox(Box smallMoneyBox) {
+        this.smallMoneyBox = smallMoneyBox;
+    }
+
+    public List<Box> getBoxes() {
+        return boxes;
+    }
+
+    public void setBoxes(List<Box> boxes) {
+        this.boxes = boxes;
     }
 
     @Override
