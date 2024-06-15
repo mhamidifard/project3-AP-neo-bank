@@ -36,6 +36,16 @@ public class Support {
         subjects.put(Subject.card,true);
     }
 
+    public String subToString(){
+        String text="subjects:\n";
+        for (HashMap.Entry<Subject,Boolean> subject: subjects.entrySet()){
+            if(subject.getValue()){
+                text+=subject.getKey()+" ";
+            }
+        }
+        return text;
+    }
+
     public String getName() {
         return name;
     }

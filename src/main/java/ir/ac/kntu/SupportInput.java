@@ -18,6 +18,7 @@ public class SupportInput {
         support=support1;
         int choice = 0;
         while (true) {
+            Print.info(support.subToString());
             Print.menu("1.verify\n2.requests\n3.list of users");
             choice = UserInput.simpleMenu();
             if (choice == -1) {
@@ -40,6 +41,7 @@ public class SupportInput {
             }
         }
     }
+
 
     public static void checkVerify(SupportRequest suppVerify) {
         int choice = 0;
@@ -89,7 +91,7 @@ public class SupportInput {
         if (phoneNumber == -1) {
             return;
         }
-        Subject subject = inSubjectFilter();
+        Subject subject = inSubjectFilter2();
         if (subject == null) {
             return;
         }
@@ -115,35 +117,6 @@ public class SupportInput {
 
             } else {
                 return phoneNumber;
-            }
-        }
-    }
-
-    public static Subject inSubjectFilter() {
-        int choice = 0;
-        while (true) {
-            Print.info("select subject");
-            Print.menu("1.report\n2.contacts\n3.transfer\n4.setting\n5.verify\n6.without filter");
-            choice = UserInput.simpleMenu();
-            if (choice == -1) {
-                return null;
-            }
-            switch (choice) {
-                case 1:
-                    return Subject.REPORT;
-                case 2:
-                    return Subject.CONTACTS;
-                case 3:
-                    return Subject.TRANSFER;
-                case 4:
-                    return Subject.SETTING;
-                case 5:
-                    return Subject.VERIFY;
-                case 6:
-                    return Subject.NOTHING;
-                default:
-                    Print.erorr("invalid choice");
-                    break;
             }
         }
     }

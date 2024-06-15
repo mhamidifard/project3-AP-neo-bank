@@ -42,7 +42,7 @@ public class UserSupport {
         int choice = 0;
         while (true) {
             Print.info("select subject");
-            Print.menu("1.report\n2.contacts\n3.transfer\n4.setting");
+            Print.menu("1.report\n2.contacts\n3.transfer\n4.setting\n5.phone charge\n6.card");
             choice = UserInput.simpleMenu();
             if (choice == -1) {
                 return null;
@@ -56,6 +56,10 @@ public class UserSupport {
                     return Subject.TRANSFER;
                 case 4:
                     return Subject.SETTING;
+                case 5:
+                    return Subject.PhoneCharge;
+                case 6:
+                    return Subject.card;
 
                 default:
                     Print.erorr("invalid choice");

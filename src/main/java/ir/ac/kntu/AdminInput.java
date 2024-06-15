@@ -288,7 +288,7 @@ public class AdminInput {
             }
             switch (choice) {
                 case 1:
-
+                    setSubjects(support);
                     break;
                 case 2:
 
@@ -319,6 +319,32 @@ public class AdminInput {
                 default:
                     Print.erorr("invalid choice");
                     break;
+            }
+        }
+    }
+
+    public static void setSubjects(Support support){
+        int choice;
+        List<Map.Entry<Subject,Boolean>> subjects=new ArrayList<>();
+        for(Map.Entry<Subject,Boolean> element:support.getSubjects().entrySet()){
+            subjects.add(element);
+        }
+        while (true){
+            Print.menu("change subject status\n0.all subjects");
+            for (int i = 0; i < subjects.size(); i++) {
+                Print.menu(i+1+"."+subjects.get(i).getKey()+"="+subjects.get(i).getValue());
+            }
+            choice = UserInput.simpleMenu();
+            if (choice == -1) {
+                return;
+            } else if (choice==0) {
+                for(Map.Entry<Subject,Boolean> element:support.getSubjects().entrySet()){
+                    element.setValue(!element.getValue());
+                }
+            } else if (0 < choice && choice <= subjects.size()) {
+                subjects.get(choice-1).setValue(!subjects.get(choice-1).getValue());
+            } else {
+                Print.erorr("invalid choice");
             }
         }
     }
