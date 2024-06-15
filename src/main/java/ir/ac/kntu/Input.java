@@ -21,6 +21,7 @@ public class Input {
         UserInput.setSyInput(syInput);
         UserSupport.setSyInput(syInput);
         UserSetting.setSyInput(syInput);
+        AdminInput.setSyInput(syInput);
         while (true){
             try {
                 userType();
@@ -117,7 +118,7 @@ public class Input {
         int choice = -1;
         String temp;
         while (true) {
-            Print.menu("select user type\n1.user\n2.support");
+            Print.menu("select user type\n1.user\n2.support\n3.admin");
             Print.bottom("#quit");
             temp = syInput.nextLine();
             if (checkLine(temp) == Command.NOTHING && isNumber(temp)) {
@@ -129,8 +130,10 @@ public class Input {
                     case 2:
                         goSupport();
                         break;
+                    case 3:
+                        AdminInput.goAdmin();
+                        break;
                     default:
-                        choice = -1;
                         Print.erorr("invalid choise");
                         break;
                 }
@@ -138,7 +141,6 @@ public class Input {
                 Print.erorr("invalid input");
             }
         }
-
     }
 
     public static void goUser() {

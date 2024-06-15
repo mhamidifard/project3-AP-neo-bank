@@ -409,7 +409,7 @@ public class UserInput {
             }
             if (amount < 1000) {
                 Print.erorr("amount is small");
-            }else if(amount+amount*Admin.getSimChargeFee()/100>account.getBalance()){
+            }else if(amount+amount*Parametr.getSimChargeFee()/100>account.getBalance()){
                 Print.erorr("balance does not enough");
             }else {
                 confirmPhoneCharge(phone,amount);

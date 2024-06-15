@@ -93,33 +93,33 @@ public class Account {
 
     public long doCardTo(long toCardNum, long amount) {
         long navId = DataBase.addTransfer(amount, accountNumber, toCardNum, TransferType.CardToCard);
-        setBalance(balance - amount - Admin.getCardToFee());
+        setBalance(balance - amount - Parametr.getCardToFee());
         doTransfer(toCardNum, amount, navId);
-        checkSmallBox(amount + Admin.getCardToFee());
+        checkSmallBox(amount + Parametr.getCardToFee());
         return navId;
     }
 
     public long doPol(long toAccNum, long amount) {
         long navId = DataBase.addTransfer(amount, accountNumber, toAccNum, TransferType.POL);
-        setBalance(balance - amount - (Admin.getPolFee() * amount) / 100);
+        setBalance(balance - amount - (Parametr.getPolFee() * amount) / 100);
         doTransfer(toAccNum, amount, navId);
-        checkSmallBox(amount + (Admin.getPolFee() * amount) / 100);
+        checkSmallBox(amount + (Parametr.getPolFee() * amount) / 100);
         return navId;
     }
 
     public long doPaya(long toAccNum, long amount) {
         long navId = DataBase.addTransfer(amount, accountNumber, toAccNum, TransferType.PAYA);
-        setBalance(balance - amount - Admin.getPayaFee());
+        setBalance(balance - amount - Parametr.getPayaFee());
         doTransfer(toAccNum, amount, navId);
-        checkSmallBox(amount + Admin.getPayaFee());
+        checkSmallBox(amount + Parametr.getPayaFee());
         return navId;
     }
 
     public long doFariTo(long toAccNum, long amount) {
         long navId = DataBase.addTransfer(amount, accountNumber, toAccNum, TransferType.FARITOFARI);
-        setBalance(balance - amount - Admin.getFariToFee());
+        setBalance(balance - amount - Parametr.getFariToFee());
         doTransfer(toAccNum, amount, navId);
-        checkSmallBox(amount + Admin.getFariToFee());
+        checkSmallBox(amount + Parametr.getFariToFee());
         return navId;
     }
 
@@ -191,11 +191,11 @@ public class Account {
     }
 
     public void chargeSim(long phoneNumber,long amount){
-        balance-=(amount+amount*Admin.getSimChargeFee()/100);
+        balance-=(amount+amount*Parametr.getSimChargeFee()/100);
         DataBase.addChargeSim(phoneNumber,amount);
         Long navId = DataBase.addTransaction(new TraSimCharge(amount,phoneNumber,accountNumber));
         transactions.add(navId);
-        checkSmallBox(amount+amount*Admin.getSimChargeFee()/100);
+        checkSmallBox(amount+amount*Parametr.getSimChargeFee()/100);
     }
 
     public long getSimCharge(){

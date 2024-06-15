@@ -5,6 +5,7 @@ import java.util.*;
 public class DataBase {
     private static List<Account> accounts = new ArrayList<>();
     private static List<Support> supports = new ArrayList<>();
+    private static List<Admin> admins=new ArrayList<>();
     private static Map<Long, Transaction> transactions = new HashMap<>();
     private static List<VerificationRequest> verifyRequests = new LinkedList<>();
     private static Map<Long, SupportRequest> supportRequests = new HashMap<>();
@@ -117,8 +118,22 @@ public class DataBase {
 
     }
 
+    public static Admin adminFind(String username){
+        for (Admin admin:admins){
+            if(admin.getUserName().equals(username)){
+                return admin;
+            }
+        }
+        return null;
+    }
+
     public static void addSupport(String name, String username, String password) {
         supports.add(new Support(name, username, password));
+    }
+
+
+    public static void addAdmin(String name, String username, String password) {
+        admins.add(new Admin(name, username, password));
     }
 
     public static List<Account> getAccounts() {
@@ -230,5 +245,13 @@ public class DataBase {
 
     public static void setRewardBoxes(List<RewardBox> rewardBoxes) {
         DataBase.rewardBoxes = rewardBoxes;
+    }
+
+    public static List<Admin> getAdmins() {
+        return admins;
+    }
+
+    public static void setAdmins(List<Admin> admins) {
+        DataBase.admins = admins;
     }
 }

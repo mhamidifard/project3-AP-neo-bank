@@ -8,12 +8,14 @@ enum Filter {
 }
 public class SupportInput {
     private static Scanner syInput;
+    private static Support support;
 
     public static void setSyInput(Scanner syInput) {
         SupportInput.syInput = syInput;
     }
 
     public static void menu(Support support1) {
+        support=support1;
         int choice = 0;
         while (true) {
             Print.menu("1.verify\n2.requests\n3.list of users");
@@ -36,35 +38,8 @@ public class SupportInput {
                     Print.erorr("invalid choice");
                     break;
             }
-
         }
     }
-//    public static void verifylist() {
-//        String temp;
-//        int choice = 0;
-//        while (true) {
-//            Print.info("requests list");
-//            for (int i = 0; i < DataBase.getVerifyRequests().size(); i++) {
-//                Print.list(i + 1 + " : " + DataBase.getVerifyRequests().get(i).summery());
-//            }
-//            Input.printBottom();
-//            temp = syInput.nextLine();
-//            if (Input.checkLine(temp) == Command.BACK) {
-//                //menu(support,syInput);
-//                return;
-//            } else if (!Input.isNumber(temp)) {
-//                Print.erorr("invalid choice");
-//            } else {
-//                choice = Integer.parseInt(temp);
-//                if (0 < choice && choice <= DataBase.getVerifyRequests().size()) {
-//                    checkVerify(DataBase.getVerifyRequests().get(choice - 1));
-//                } else {
-//                    choice = 0;
-//                    Print.erorr("invalid choice");
-//                }
-//            }
-//        }
-//    }
 
     public static void checkVerify(SupportRequest suppVerify) {
         int choice = 0;
@@ -123,7 +98,6 @@ public class SupportInput {
             return;
         }
         requestList(phoneNumber, status, subject);
-
     }
 
     public static long inPhoneFilter() {
@@ -171,7 +145,6 @@ public class SupportInput {
                     Print.erorr("invalid choice");
                     break;
             }
-
         }
     }
 
@@ -179,12 +152,14 @@ public class SupportInput {
         int choice = 0;
         while (true) {
             Print.info("select status");
-            Print.menu("1.created\n2.process\n3.closed\n4.verified\n5.without filter");
+            Print.menu("0.without filter\n1.created\n2.process\n3.closed\n4.verified");
             choice = UserInput.simpleMenu();
             if (choice == -1) {
                 return null;
             }
             switch (choice) {
+                case 0:
+                    return Status.NOTHING;
                 case 1:
                     return Status.CREATED;
                 case 2:
@@ -193,13 +168,37 @@ public class SupportInput {
                     return Status.CLOSED;
                 case 4:
                     return Status.VERIFIED;
-                case 5:
-                    return Status.NOTHING;
                 default:
                     Print.erorr("invalid choice");
                     break;
             }
+        }
+    }
 
+    public static Subject inSubjectFilter2(){
+        int choice;
+        Print.info("select status");
+        List<Subject> choices=new ArrayList<>();
+        for (Map.Entry<Subject,Boolean> subject:support.getSubjects().entrySet()){
+            if(subject.getValue()){
+                choices.add(subject.getKey());
+            }
+        }
+        while (true) {
+            Print.list("0.without filter");
+            for (int i = 1; i <= choices.size(); i++) {
+                Print.list(i + "." + choices.get(i - 1));
+            }
+            choice = UserInput.simpleMenu();
+            if (choice == -1) {
+                return null;
+            }else if(choice==0){
+                return Subject.NOTHING;
+            }else if (0 < choice && choice <= choices.size()) {
+                return choices.get(choice-1);
+            } else {
+                Print.erorr("invalid choice");
+            }
         }
     }
 
@@ -238,6 +237,9 @@ public class SupportInput {
             return false;
         }
         if (status != Status.NOTHING && request.getStatus() != status) {
+            return false;
+        }
+        if(!support.getSubjects().get(request.getSubject())){
             return false;
         }
         return subject == Subject.NOTHING || request.getSubject() == subject;
@@ -375,7 +377,6 @@ public class SupportInput {
             }
         }
         filters.put(Filter.PHONE, phone);
-
     }
 
     public static void filterUser(Map<Filter, String> filters) {
@@ -496,5 +497,4 @@ public class SupportInput {
             }
         }
     }
-
 }

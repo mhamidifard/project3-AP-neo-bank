@@ -136,7 +136,7 @@ public class TransferInput {
         }
         while (true) {
             List<TransferType> choices = new ArrayList<>();
-            if (amount <= Admin.getFariToMax()) {
+            if (amount <= Parametr.getFariToMax()) {
                 choices.add(TransferType.FARITOFARI);
             }
             for (int i = 1; i <= choices.size(); i++) {
@@ -165,13 +165,13 @@ public class TransferInput {
         }
         while (true) {
             List<TransferType> choices = new ArrayList<>();
-            if (toCardNum != 0 && amount <= Admin.getCardToMax()) {
+            if (toCardNum != 0 && amount <= Parametr.getCardToMax()) {
                 choices.add(TransferType.CardToCard);
             }
-            if (amount <= Admin.getPolMax()) {
+            if (amount <= Parametr.getPolMax()) {
                 choices.add(TransferType.POL);
             }
-            if (amount <= Admin.getPayaMax()) {
+            if (amount <= Parametr.getPayaMax()) {
                 choices.add(TransferType.PAYA);
             }
             for (int i = 1; i <= choices.size(); i++) {
@@ -209,7 +209,7 @@ public class TransferInput {
 
     public static void cardTo(long toCardNum, long amount) {
         OtherBanks toAccount = OtherDataBase.findByCardNum(toCardNum);
-        if (amount + Admin.getCardToFee() > account.getBalance()) {
+        if (amount + Parametr.getCardToFee() > account.getBalance()) {
             Print.erorr("The balance is not enough");
             return;
         }
@@ -256,7 +256,7 @@ public class TransferInput {
 
     public static void pol(long toAccountNum, long amount) {
         OtherBanks toAccount = OtherDataBase.findByAccNum(toAccountNum);
-        if (amount + (Admin.getPolFee() * amount) / 100 > account.getBalance()) {
+        if (amount + (Parametr.getPolFee() * amount) / 100 > account.getBalance()) {
             Print.erorr("The balance is not enough");
             return;
         }
@@ -269,7 +269,7 @@ public class TransferInput {
 
     public static void paya(long toAccountNum, long amount) {
         OtherBanks toAccount = OtherDataBase.findByAccNum(toAccountNum);
-        if (amount + Admin.getPayaFee() > account.getBalance()) {
+        if (amount + Parametr.getPayaFee() > account.getBalance()) {
             Print.erorr("The balance is not enough");
             return;
         }
@@ -282,7 +282,7 @@ public class TransferInput {
 
     public static void fariTo(long toAccountNum, long amount) {
         Account toAccount = DataBase.findByAccNum(toAccountNum);
-        if (amount + Admin.getFariToFee() > account.getBalance()) {
+        if (amount + Parametr.getFariToFee() > account.getBalance()) {
             Print.erorr("The balance is not enough");
             return;
         } else if (!confirmFari(toAccount, amount, toAccountNum)) {

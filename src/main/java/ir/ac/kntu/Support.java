@@ -1,13 +1,18 @@
 package ir.ac.kntu;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Support {
     private String name, userName;
     private int hashPass;
+    private Map<Subject,Boolean> subjects=new HashMap<>();
 
     public Support(String name, String userName, String password) {
         setName(name);
         setUserName(userName);
         setHashPass(password);
+        buildSubjects();
     }
 
     public void verify(VerificationRequest verifyReq) {
@@ -19,6 +24,16 @@ public class Support {
     public boolean passwordEqual(String password) {
         return password.hashCode() == getHashPass();
 
+    }
+
+    public  void buildSubjects(){
+        subjects.put(Subject.VERIFY,true);
+        subjects.put(Subject.REPORT,true);
+        subjects.put(Subject.CONTACTS,true);
+        subjects.put(Subject.TRANSFER,true);
+        subjects.put(Subject.SETTING,true);
+        subjects.put(Subject.PhoneCharge,true);
+        subjects.put(Subject.card,true);
     }
 
     public String getName() {
@@ -43,5 +58,22 @@ public class Support {
 
     public void setHashPass(String password) {
         this.hashPass = password.hashCode();
+    }
+
+    public Map<Subject, Boolean> getSubjects() {
+        return subjects;
+    }
+
+    public void setSubjects(Map<Subject, Boolean> subjects) {
+        this.subjects = subjects;
+    }
+
+    public String summery(){
+        return userName+"   "+name;
+    }
+
+    @Override
+    public String toString(){
+        return "user name: "+userName+"     name: "+name;
     }
 }
