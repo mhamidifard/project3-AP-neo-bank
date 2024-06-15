@@ -5,6 +5,7 @@ import java.util.*;
 public class Account {
     private boolean verifyStatus = false;
     private boolean contactFeature = true;
+    private Long verifyReq;
     private int dataBaseNum;
     private long balance = 0;
     private long phoneNumber;
@@ -358,5 +359,13 @@ public class Account {
 
     public String summery() {
         return firstName + " " + lastName + " phone: " + phoneNumber;
+    }
+
+    public Long getVerifyReq() {
+        return verifyReq;
+    }
+
+    public void setVerifyReq(Long verifyReq) {
+        this.verifyReq = verifyReq;
     }
 }

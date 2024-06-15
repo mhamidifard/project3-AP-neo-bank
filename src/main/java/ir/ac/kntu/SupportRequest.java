@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 enum Status {
-    CREATED, PROCESS, CLOSED, NOTHING;
+    VERIFIED,CREATED, PROCESS, CLOSED, NOTHING;
 }
 
 enum Subject {
-    REPORT, CONTACTS, TRANSFER, SETTING, NOTHING;
+    VERIFY,REPORT, CONTACTS, TRANSFER, SETTING, NOTHING;
 }
 
 public class SupportRequest {
@@ -30,6 +30,22 @@ public class SupportRequest {
 
     public void addMessage(String text, Sender sender) {
         messages.add(new Message(text, sender));
+    }
+
+    public Message getLastMessage(){
+        return messages.get(messages.size()-1);
+    }
+
+    public void accept() {
+        Account account = DataBase.findByPhone(userPhone);
+        account.verify();
+        addMessage("Verified",Sender.SUPPORT);
+        setStatus(Status.VERIFIED);
+    }
+
+    public void reject(String text) {
+        addMessage(text,Sender.SUPPORT);
+        setStatus(Status.CLOSED);
     }
 
     public List<Message> getMessages() {

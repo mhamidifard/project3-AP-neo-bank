@@ -1,14 +1,11 @@
 package ir.ac.kntu;
 
 import ir.ac.kntu.util.ComprableUser;
-
 import java.time.Instant;
 import java.util.*;
-
 enum Filter {
     PHONE, FIRSTNAME, LASTNAME;
 }
-
 public class SupportInput {
     private static Scanner syInput;
 
@@ -27,7 +24,7 @@ public class SupportInput {
 
             switch (choice) {
                 case 1:
-                    verifylist();
+                    //verifylist();
                     break;
                 case 2:
                     inFilterReq();
@@ -42,46 +39,60 @@ public class SupportInput {
 
         }
     }
+//    public static void verifylist() {
+//        String temp;
+//        int choice = 0;
+//        while (true) {
+//            Print.info("requests list");
+//            for (int i = 0; i < DataBase.getVerifyRequests().size(); i++) {
+//                Print.list(i + 1 + " : " + DataBase.getVerifyRequests().get(i).summery());
+//            }
+//            Input.printBottom();
+//            temp = syInput.nextLine();
+//            if (Input.checkLine(temp) == Command.BACK) {
+//                //menu(support,syInput);
+//                return;
+//            } else if (!Input.isNumber(temp)) {
+//                Print.erorr("invalid choice");
+//            } else {
+//                choice = Integer.parseInt(temp);
+//                if (0 < choice && choice <= DataBase.getVerifyRequests().size()) {
+//                    checkVerify(DataBase.getVerifyRequests().get(choice - 1));
+//                } else {
+//                    choice = 0;
+//                    Print.erorr("invalid choice");
+//                }
+//            }
+//        }
+//    }
 
-    public static void verifylist() {
-        String temp;
+    public static void checkVerify(SupportRequest suppVerify) {
         int choice = 0;
-        while (true) {
-            Print.info("requests list");
-            for (int i = 0; i < DataBase.getVerifyRequests().size(); i++) {
-                Print.list(i + 1 + " : " + DataBase.getVerifyRequests().get(i).summery());
-            }
-            Input.printBottom();
-            temp = syInput.nextLine();
-            if (Input.checkLine(temp) == Command.BACK) {
-                //menu(support,syInput);
-                return;
-            } else if (!Input.isNumber(temp)) {
-                Print.erorr("invalid choice");
-            } else {
-                choice = Integer.parseInt(temp);
-                if (0 < choice && choice <= DataBase.getVerifyRequests().size()) {
-                    checkVerify(DataBase.getVerifyRequests().get(choice - 1));
+        Print.info(suppVerify.toString());
+        if (suppVerify.getStatus() == Status.CREATED) {
+            desideVerify(suppVerify);
+        } else {
+            while (choice == 0) {
+                choice = UserInput.simpleMenu();
+                if (choice == -1) {
+                    return;
                 } else {
-                    choice = 0;
                     Print.erorr("invalid choice");
                 }
             }
         }
     }
 
-    public static void checkVerify(VerificationRequest verifyReq) {
+    public static void desideVerify(SupportRequest suppVerify) {
         String temp;
-        int choice = 0;
-        while (choice == 0) {
-            Print.info(verifyReq.toString());
+        while (true) {
             Print.menu("1.accept\n2.reject");
-            choice = UserInput.simpleMenu();
+            int choice = UserInput.simpleMenu();
             if (choice == -1) {
                 return;
             }
             if (choice == 1) {
-                verifyReq.accept();
+                suppVerify.accept();
                 return;
             } else if (choice == 2) {
                 Print.input("Enter the message");
@@ -89,14 +100,13 @@ public class SupportInput {
                 if ("@".equals(temp)) {
                     return;
                 }
-                verifyReq.reject(temp);
+                suppVerify.reject(temp);
                 return;
             } else {
-                choice = 0;
                 Print.erorr("invalid choice");
             }
-
         }
+
     }
 
     public static void inFilterReq() {
@@ -119,12 +129,12 @@ public class SupportInput {
     public static long inPhoneFilter() {
         long phoneNumber = 0;
         while (true) {
-            Print.input("Enter phone number: (if you dont want filter by phone inter 0)");
+            Print.input("Enter phone number: (if you dont want filter by phone inter 1)");
             phoneNumber = UserInput.simpleLong();
             if (phoneNumber == -1) {
                 return -1;
             }
-            if (phoneNumber == 0) {
+            if (phoneNumber == 1) {
                 return 0;
             } else if (DataBase.findByPhone(phoneNumber) == null) {
                 Print.erorr("there is not this phone number ");
@@ -139,7 +149,7 @@ public class SupportInput {
         int choice = 0;
         while (true) {
             Print.info("select subject");
-            Print.menu("1.report\n2.contacts\n3.transfer\n4.setting\n5.without filter");
+            Print.menu("1.report\n2.contacts\n3.transfer\n4.setting\n5.verify\n6.without filter");
             choice = UserInput.simpleMenu();
             if (choice == -1) {
                 return null;
@@ -154,6 +164,8 @@ public class SupportInput {
                 case 4:
                     return Subject.SETTING;
                 case 5:
+                    return Subject.VERIFY;
+                case 6:
                     return Subject.NOTHING;
                 default:
                     Print.erorr("invalid choice");
@@ -167,7 +179,7 @@ public class SupportInput {
         int choice = 0;
         while (true) {
             Print.info("select status");
-            Print.menu("1.created\n2.process\n3.closed\n4.without filter");
+            Print.menu("1.created\n2.process\n3.closed\n4.verified\n5.without filter");
             choice = UserInput.simpleMenu();
             if (choice == -1) {
                 return null;
@@ -180,6 +192,8 @@ public class SupportInput {
                 case 3:
                     return Status.CLOSED;
                 case 4:
+                    return Status.VERIFIED;
+                case 5:
                     return Status.NOTHING;
                 default:
                     Print.erorr("invalid choice");
@@ -233,22 +247,27 @@ public class SupportInput {
         //System.out.println(request);
         int choice = 0;
         while (true) {
-            Print.info(request.toString());
-            Print.menu("1.add message\n2.set status");
-            choice = UserInput.simpleMenu();
-            if (choice == -1) {
+            if (request.getSubject() == Subject.VERIFY) {
+                checkVerify(request);
                 return;
-            }
-            switch (choice) {
-                case 1:
-                    inAddMessage(request);
-                    break;
-                case 2:
-                    setStatusReq(request);
-                    break;
-                default:
-                    Print.erorr("invalid choice");
-                    break;
+            } else {
+                Print.info(request.toString());
+                Print.menu("1.add message\n2.set status");
+                choice = UserInput.simpleMenu();
+                if (choice == -1) {
+                    return;
+                }
+                switch (choice) {
+                    case 1:
+                        inAddMessage(request);
+                        break;
+                    case 2:
+                        setStatusReq(request);
+                        break;
+                    default:
+                        Print.erorr("invalid choice");
+                        break;
+                }
             }
 
         }

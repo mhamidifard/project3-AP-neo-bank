@@ -67,6 +67,15 @@ public class DataBase {
         verifyRequests.add(new VerificationRequest(phoneNumber));
     }
 
+    public static long addSuppVerify(long phoneNumber){
+        SupportRequest request=addSupportReq("#verify",phoneNumber,Subject.VERIFY);
+        Account account=findByPhone(phoneNumber);
+        String message="first name: " + account.getFirstName() + "  " + "last name: " + account.getLastName() + "\n"
+                + "phone: " + account.getPhoneNumber() + " id: " + account.getNationalId();
+        request.addMessage(message,Sender.USER);
+        return request.getNavId();
+    }
+
     public static void removeVerifyReq(VerificationRequest verifyReq) {
         verifyRequests.remove(verifyReq);
     }

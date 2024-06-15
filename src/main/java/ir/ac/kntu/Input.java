@@ -227,9 +227,11 @@ public class Input {
         if ("@".equals(password)) {
             return;
         }
-
-        DataBase.addUser(new Account(firstName, lastName, phoneNumber, nationalId, password));
-        DataBase.addVerifyReq(phoneNumber);
+        Account newAccount=new Account(firstName, lastName, phoneNumber, nationalId, password);
+        DataBase.addUser(newAccount);
+        //DataBase.addVerifyReq(phoneNumber);
+        newAccount.setVerifyReq(DataBase.addSuppVerify(phoneNumber));
+        newAccount.addSuppReq(newAccount.getVerifyReq());
         Print.info("Register successfully");
         //userType();
     }
@@ -375,18 +377,14 @@ public class Input {
     }
 
     public static void checkUserVr(Account account) {
-        boolean supportchecked = true;
-
-        VerificationRequest verifyReq = DataBase.findVerifyReq(account.getPhoneNumber());
-        if (verifyReq != null) {
-            supportchecked = verifyReq.isSupportChecked();
-        }
+        //VerificationRequest verifyReq = DataBase.findVerifyReq(account.getPhoneNumber());
+        SupportRequest suppReq=DataBase.findSuppReq(account.getVerifyReq());
         if (account.isVerifyStatus()) {
             UserInput.menu(account);
             return;
-        } else if (!supportchecked) {
+        } else if (suppReq.getLastMessage().getSender()==Sender.USER) {
             int choice;
-            Print.erorr(verifyReq.getMessage());
+            Print.erorr("please wait to verify");
             while (true) {
                 choice = UserInput.simpleMenu();
                 if (choice == -1) {
@@ -396,12 +394,12 @@ public class Input {
                 }
             }
         } else {
-            reRegister(account, verifyReq);
+            reRegister(account, suppReq);
         }
     }
 
-    public static void reRegister(Account account, VerificationRequest verifyReq) {
-        Print.erorr(verifyReq.getMessage());
+    public static void reRegister(Account account, SupportRequest suppReq) {
+        Print.erorr(suppReq.getLastMessage().getText());
         int choice = 0;
         while (choice == 0) {
             Print.menu("1.editRegister");
@@ -451,13 +449,15 @@ public class Input {
         if ("@".equals(password)) {
             return;
         }
-        long lastPhoneNumber = account.getPhoneNumber();
+        //long lastPhoneNumber = account.getPhoneNumber();
         account.setPhoneNumber(phoneNumber);
         account.setNationalId(nationalId);
         account.setFirstName(firstName);
         account.setLastName(lastName);
         account.setPasswordHash(password);
-        DataBase.renewVerifyReq(lastPhoneNumber, phoneNumber);
+        //DataBase.renewVerifyReq(lastPhoneNumber, phoneNumber);
+        account.setVerifyReq(DataBase.addSuppVerify(phoneNumber));
+        account.addSuppReq(account.getVerifyReq());
         Print.info("edit register successfully");
 
     }
