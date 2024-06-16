@@ -1,6 +1,7 @@
 package ir.ac.kntu;
 
 public class Admin {
+    private boolean active=true;
     private String name, userName;
     private int hashPass;
 
@@ -42,11 +43,24 @@ public class Admin {
     }
 
     public String summery(){
-        return userName+"   "+name;
+        String status="active";
+        if(!active){
+            status="block";
+        }
+        return userName+"   "+name+"    "+status;
     }
 
     @Override
     public String toString(){
-        return "user name: "+userName+"     name: "+name;
+        return "user name: "+userName+"     name: "+name+
+                "\nactive status="+active;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }

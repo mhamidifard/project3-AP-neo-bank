@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Support {
+    private boolean active=true;
     private String name, userName;
     private int hashPass;
     private Map<Subject,Boolean> subjects=new HashMap<>();
@@ -79,11 +80,24 @@ public class Support {
     }
 
     public String summery(){
-        return userName+"   "+name;
+        String status="active";
+        if(!active){
+            status="block";
+        }
+        return userName+"   "+name+"    "+status;
     }
 
     @Override
     public String toString(){
-        return "user name: "+userName+"     name: "+name;
+        return "user name: "+userName+"     name: "+name+
+                "\nactive status="+active;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }

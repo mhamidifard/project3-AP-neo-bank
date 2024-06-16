@@ -15,7 +15,6 @@ public class AdminInput {
     }
 
     public static void goAdmin() {
-        Admin admin1 = null;
         String userName = "";
         while (userName.isEmpty()) {
             Print.input("admin login\nEnter username:");
@@ -29,10 +28,14 @@ public class AdminInput {
                 userName = "";
             }
         }
-        goAdminPass(admin1);
+        if(!admin.isActive()){
+            Print.erorr("you are block");
+            return;
+        }
+        goAdminPass();
     }
 
-    public static void goAdminPass(Admin admin1) {
+    public static void goAdminPass() {
         String password;
         boolean loop = true;
         while (loop) {
@@ -43,7 +46,6 @@ public class AdminInput {
             } else if (admin.passwordEqual(password)) {
                 loop = false;
                 Print.info("Login successfully");
-                admin=admin1;
                 menu();
                 return;
             } else {
@@ -93,13 +95,13 @@ public class AdminInput {
                     //verifylist();
                     break;
                 case 2:
-                    //inFilterReq();
+                    AdminListSupp.addSupport();
                     break;
                 case 3:
                     inFilterAdmin();
                     break;
                 case 4:
-                    inFilterSupport();
+                    AdminListSupp.inFilterSupport();
                     break;
                 case 5:
                     SupportInput.inFilterUser();
@@ -111,27 +113,7 @@ public class AdminInput {
         }
     }
 
-    public static void inFilterSupport() {
-        Map<AdminFilter, String> filters = new HashMap<>();
-        int choice = 0;
-        while (true) {
-            Print.info("filter support by");
-            Print.menu("1.name\n2.user name\n3.apply");
-            choice = UserInput.simpleMenu();
-            if (choice == -1) {
-                return;
-            } else if (choice == 1) {
-                inNameFilter(filters);
-            } else if (choice == 2) {
-                inUserNameFilter(filters);
-            }else if (choice == 3) {
-                filterSupport(filters);
-                filters = new HashMap<>();
-            } else {
-                Print.erorr("invalid choice");
-            }
-        }
-    }
+
 
     public static void inFilterAdmin() {
         Map<AdminFilter, String> filters = new HashMap<>();
@@ -171,20 +153,7 @@ public class AdminInput {
         filters.put(AdminFilter.USERNAME, userName);
     }
 
-    public static void filterSupport(Map<AdminFilter, String> filters) {
-        ArrayList<ComprableSupport> listSupport = new ArrayList<>();
-        for (Support support : DataBase.getSupports()) {
-            ComprableSupport coSupport = new ComprableSupport(support);
-            for (HashMap.Entry<AdminFilter, String> filter : filters.entrySet()) {
-                checkSupport(filter, support, coSupport);
-            }
-            if (coSupport.isCondition()) {
-                listSupport.add(coSupport);
-            }
-        }
-        listSupport.sort(ComprableSupport::compareTo);
-        showSupportList(listSupport);
-    }
+
 
     public static void filterAdmin(Map<AdminFilter, String> filters) {
         ArrayList<ComprableAdmin> listAdmin = new ArrayList<>();
@@ -201,24 +170,7 @@ public class AdminInput {
         showAdminList(listAdmin);
     }
 
-    public static void checkSupport(HashMap.Entry<AdminFilter, String> filter, Support support, ComprableSupport coSupport) {
-        switch (filter.getKey()) {
-            case NAME:
-                coSupport.addLength(support.getName().length());
-                if (!Input.similarity(support.getName(), filter.getValue())) {
-                    coSupport.setCondition(false);
-                }
-                break;
-            case USERNAME:
-                coSupport.addLength(support.getUserName().length());
-                if (!Input.similarity(support.getUserName(), filter.getValue())) {
-                    coSupport.setCondition(false);
-                }
-                break;
-            default:
-                break;
-        }
-    }
+
 
     public static void checkAdmin(HashMap.Entry<AdminFilter, String> filter, Admin admin, ComprableAdmin coAdmin) {
         switch (filter.getKey()) {
@@ -239,24 +191,7 @@ public class AdminInput {
         }
     }
 
-    public static void showSupportList(List<ComprableSupport> listSupport) {
-        Print.info("list of supports:");
-        int choice;
-        while (true) {
-            for (int i = 0; i < listSupport.size(); i++) {
-                Print.list(i + 1 + ". " + listSupport.get(i).getSupport().summery());
-            }
-            choice = UserInput.simpleMenu();
-            if (choice == -1) {
-                return;
-            }
-            if (0 < choice && choice <= listSupport.size()) {
-                showSupport(listSupport.get(choice - 1).getSupport());
-            } else {
-                Print.erorr("invalid choice");
-            }
-        }
-    }
+
 
     public static void showAdminList(List<ComprableAdmin> listAdmin) {
         Print.info("list of admins:");
@@ -277,28 +212,9 @@ public class AdminInput {
         }
     }
 
-    public static void showSupport(Support support) {
-        int choice;
-        while (true) {
-            Print.info(support.toString());
-            Print.menu("\n1.set activity subjects\n2.block");
-            choice = UserInput.simpleMenu();
-            if (choice == -1) {
-                return;
-            }
-            switch (choice) {
-                case 1:
-                    setSubjects(support);
-                    break;
-                case 2:
 
-                    break;
-                default:
-                    Print.erorr("invalid choice");
-                    break;
-            }
-        }
-    }
+
+
 
     public static void showAdmin(Admin admin) {
         int choice;
@@ -323,31 +239,7 @@ public class AdminInput {
         }
     }
 
-    public static void setSubjects(Support support){
-        int choice;
-        List<Map.Entry<Subject,Boolean>> subjects=new ArrayList<>();
-        for(Map.Entry<Subject,Boolean> element:support.getSubjects().entrySet()){
-            subjects.add(element);
-        }
-        while (true){
-            Print.menu("change subject status\n0.all subjects");
-            for (int i = 0; i < subjects.size(); i++) {
-                Print.menu(i+1+"."+subjects.get(i).getKey()+"="+subjects.get(i).getValue());
-            }
-            choice = UserInput.simpleMenu();
-            if (choice == -1) {
-                return;
-            } else if (choice==0) {
-                for(Map.Entry<Subject,Boolean> element:support.getSubjects().entrySet()){
-                    element.setValue(!element.getValue());
-                }
-            } else if (0 < choice && choice <= subjects.size()) {
-                subjects.get(choice-1).setValue(!subjects.get(choice-1).getValue());
-            } else {
-                Print.erorr("invalid choice");
-            }
-        }
-    }
+
 
     public static String defineName() {
         String temp, name = "";

@@ -356,6 +356,10 @@ public class Input {
                 userName = "";
             }
         }
+        if(!support.isActive()){
+            Print.erorr("you are block");
+            return;
+        }
         goSupportPass(support);
     }
 

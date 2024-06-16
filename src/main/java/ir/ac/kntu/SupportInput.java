@@ -18,7 +18,7 @@ public class SupportInput {
         support=support1;
         int choice = 0;
         while (true) {
-            Print.info(support.subToString());
+            Print.info(support.summery()+"\n"+support.subToString());
             Print.menu("1.verify\n2.requests\n3.list of users");
             choice = UserInput.simpleMenu();
             if (choice == -1) {
