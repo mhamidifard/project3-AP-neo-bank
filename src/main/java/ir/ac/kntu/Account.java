@@ -353,8 +353,8 @@ public class Account {
 
     @Override
     public String toString() {
-        return "first name: " + firstName + " last name: " + lastName +
-                "\nphone: " + phoneNumber + " account number: " + accountNumber;
+        return "first name: " + firstName + " last name: " + lastName +" verify status: "+isVerifyStatus()+
+                "\nphone: " + phoneNumber + " account number: " + accountNumber+" id: "+getNationalId();
     }
 
     public String summery() {

@@ -110,7 +110,8 @@ public class AdminInput {
                 AdminListSupp.inFilterSupport();
                 break;
             case 5:
-                SupportInput.inFilterUser();
+                AdminListUser.inFilterUser();
+                break;
             default:
                 Print.erorr("invalid choice");
                 break;

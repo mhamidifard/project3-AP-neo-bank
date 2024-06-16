@@ -325,7 +325,7 @@ public class TransferInput {
             Print.info("contacts list");
             for (Map.Entry<Long, Contact> element : account.getContactMap().entrySet()) {
                 toAccount = DataBase.findByAccNum(element.getValue().getAccountNumber());
-                if (toAccount.isVerifyStatus() && toAccount.isContactFeature() && toAccount.containContact(account.getPhoneNumber())) {
+                if (toAccount != null && toAccount.isVerifyStatus() && toAccount.isContactFeature() && toAccount.containContact(account.getPhoneNumber())) {
                     contactList.add(element.getValue().getAccountNumber());
                     Print.list(counter + ". " + element.getValue().summery());
                     counter++;

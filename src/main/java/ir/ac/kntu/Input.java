@@ -388,7 +388,7 @@ public class Input {
         if (account.isVerifyStatus()) {
             UserInput.menu(account);
             return;
-        } else if (suppReq.getLastMessage().getSender()==Sender.USER) {
+        } else if ( account.getAccountNumber()!=0 ||suppReq.getLastMessage().getSender()==Sender.USER) {
             int choice;
             Print.erorr("please wait to verify");
             while (true) {
