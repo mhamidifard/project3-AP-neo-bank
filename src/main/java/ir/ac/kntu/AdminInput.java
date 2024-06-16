@@ -57,6 +57,7 @@ public class AdminInput {
     public static void menu() {
         int choice = 0;
         while (true) {
+            Print.info(admin.summery());
             Print.menu("1.main setting\n2.manage users\n3.Auto trasaction");
             choice = UserInput.simpleMenu();
             if (choice == -1) {
@@ -89,53 +90,35 @@ public class AdminInput {
             if (choice == -1) {
                 return;
             }
-
-            switch (choice) {
-                case 1:
-                    //verifylist();
-                    break;
-                case 2:
-                    AdminListSupp.addSupport();
-                    break;
-                case 3:
-                    inFilterAdmin();
-                    break;
-                case 4:
-                    AdminListSupp.inFilterSupport();
-                    break;
-                case 5:
-                    SupportInput.inFilterUser();
-                default:
-                    Print.erorr("invalid choice");
-                    break;
-            }
+            switchManageUser(choice);
 
         }
     }
 
-
-
-    public static void inFilterAdmin() {
-        Map<AdminFilter, String> filters = new HashMap<>();
-        int choice = 0;
-        while (true) {
-            Print.info("filter admin by");
-            Print.menu("1.name\n2.user name\n3.apply");
-            choice = UserInput.simpleMenu();
-            if (choice == -1) {
-                return;
-            } else if (choice == 1) {
-                inNameFilter(filters);
-            } else if (choice == 2) {
-                inUserNameFilter(filters);
-            }else if (choice == 3) {
-                filterAdmin(filters);
-                filters = new HashMap<>();
-            } else {
+    public static void switchManageUser(int choice){
+        switch (choice) {
+            case 1:
+                AdminListAdmin.addAdmin();
+                break;
+            case 2:
+                AdminListSupp.addSupport();
+                break;
+            case 3:
+                AdminListAdmin.inFilterAdmin();
+                break;
+            case 4:
+                AdminListSupp.inFilterSupport();
+                break;
+            case 5:
+                SupportInput.inFilterUser();
+            default:
                 Print.erorr("invalid choice");
-            }
+                break;
         }
     }
+
+
+
 
     public static void inNameFilter(Map<AdminFilter, String> filters) {
         String name = defineName();
@@ -152,94 +135,6 @@ public class AdminInput {
         }
         filters.put(AdminFilter.USERNAME, userName);
     }
-
-
-
-    public static void filterAdmin(Map<AdminFilter, String> filters) {
-        ArrayList<ComprableAdmin> listAdmin = new ArrayList<>();
-        for (Admin admin : DataBase.getAdmins()) {
-            ComprableAdmin coAdmin = new ComprableAdmin(admin);
-            for (HashMap.Entry<AdminFilter, String> filter : filters.entrySet()) {
-                checkAdmin(filter, admin, coAdmin);
-            }
-            if (coAdmin.isCondition()) {
-                listAdmin.add(coAdmin);
-            }
-        }
-        listAdmin.sort(ComprableAdmin::compareTo);
-        showAdminList(listAdmin);
-    }
-
-
-
-    public static void checkAdmin(HashMap.Entry<AdminFilter, String> filter, Admin admin, ComprableAdmin coAdmin) {
-        switch (filter.getKey()) {
-            case NAME:
-                coAdmin.addLength(admin.getName().length());
-                if (!Input.similarity(admin.getName(), filter.getValue())) {
-                    coAdmin.setCondition(false);
-                }
-                break;
-            case USERNAME:
-                coAdmin.addLength(admin.getUserName().length());
-                if (!Input.similarity(admin.getUserName(), filter.getValue())) {
-                    coAdmin.setCondition(false);
-                }
-                break;
-            default:
-                break;
-        }
-    }
-
-
-
-    public static void showAdminList(List<ComprableAdmin> listAdmin) {
-        Print.info("list of admins:");
-        int choice;
-        while (true) {
-            for (int i = 0; i < listAdmin.size(); i++) {
-                Print.list(i + 1 + ". " + listAdmin.get(i).getAdmin().summery());
-            }
-            choice = UserInput.simpleMenu();
-            if (choice == -1) {
-                return;
-            }
-            if (0 < choice && choice <= listAdmin.size()) {
-                showAdmin(listAdmin.get(choice - 1).getAdmin());
-            } else {
-                Print.erorr("invalid choice");
-            }
-        }
-    }
-
-
-
-
-
-    public static void showAdmin(Admin admin) {
-        int choice;
-        while (true) {
-            Print.info(admin.toString());
-            Print.menu("\n1.block");
-            choice = UserInput.simpleMenu();
-            if (choice == -1) {
-                return;
-            }
-            switch (choice) {
-                case 1:
-
-                    break;
-                case 2:
-
-                    break;
-                default:
-                    Print.erorr("invalid choice");
-                    break;
-            }
-        }
-    }
-
-
 
     public static String defineName() {
         String temp, name = "";

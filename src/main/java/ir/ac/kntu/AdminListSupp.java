@@ -107,6 +107,7 @@ public class AdminListSupp {
             }
         }
     }
+
     public static void setSubjects(Support support){
         int choice;
         List<Map.Entry<Subject,Boolean>> subjects=new ArrayList<>();
@@ -151,6 +152,7 @@ public class AdminListSupp {
                     break;
                 case 3:
                     changeSuppPassword(support);
+                    break;
                 default:
                     Print.erorr("invalid choice");
                     break;

@@ -10,6 +10,7 @@ public class Main {
         DataBase.addUser(new Account("amir","hamedi",9301234567L,"007","13871388Wz@"));
         DataBase.findById("007").verify();
         DataBase.addAdmin("mohammad sajjad","admin12","1382+");
+        DataBase.addAdmin("amir hosseyn","admin13","1383+");
 
         OtherDataBase.setAccounts();
         Input.first();
