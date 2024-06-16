@@ -1,5 +1,8 @@
 package ir.ac.kntu;
 
+import ir.ac.kntu.util.Calendar;
+
+import java.time.Instant;
 import java.util.*;
 
 enum AdminFilter {
@@ -66,13 +69,13 @@ public class AdminInput {
 
             switch (choice) {
                 case 1:
-                    //verifylist();
+                    mainSetting();
                     break;
                 case 2:
                     manageUser();
                     break;
                 case 3:
-                    //inFilterUser();
+                    autoTransaction();
                     break;
                 default:
                     Print.erorr("invalid choice");
@@ -172,4 +175,176 @@ public class AdminInput {
         }
         return userName;
     }
+
+    public static void mainSetting(){
+        int choice = 0;
+        while (true) {
+            Print.menu("1.maximum\n2.fee\n3.profit");
+            choice = UserInput.simpleMenu();
+            if (choice == -1) {
+                return;
+            }
+            switch (choice) {
+                case 1:
+                    changeMaxes();
+                    break;
+                case 2:
+                    changeFees();
+                    break;
+                case 3:
+                    changeProfit();
+                    break;
+                default:
+                    Print.erorr("invalid choice");
+                    break;
+            }
+
+        }
+    }
+
+    public static void changeMaxes(){
+        int choice = 0;
+        while (true) {
+            Print.menu("change maximum\n1.card to card="+Parametr.getCardToMax()+"\n2.pol="+Parametr.getPolMax()+
+                    "\n3.paya="+Parametr.getPayaMax()+"\n4.fari to fari="+Parametr.getFariToMax());
+            choice = UserInput.simpleMenu();
+            if (choice == -1) {
+                return;
+            }
+            switch (choice) {
+                case 1:
+                    Parametr.setCardToMax(simpleLong("card to card max"));
+                    break;
+                case 2:
+                    Parametr.setPolMax(simpleLong("pol max"));
+                    break;
+                case 3:
+                    Parametr.setPayaMax(simpleLong("paya max"));
+                    break;
+                case 4:
+                    Parametr.setFariToMax(simpleLong("fari to fari max"));
+                    break;
+                default:
+                    Print.erorr("invalid choice");
+                    break;
+            }
+        }
+    }
+
+    public static void changeFees(){
+        int choice = 0;
+        while (true) {
+            Print.menu("change fee\n1.card to card="+Parametr.getCardToFee()+"\n2.pol="+Parametr.getPolFee()+
+                    "\n3.paya="+Parametr.getPayaFee()+"\n4.fari to fari="+Parametr.getFariToFee()+"\n5.charge phone="+Parametr.getSimChargeFee());
+            choice = UserInput.simpleMenu();
+            if (choice == -1) {
+                return;
+            }
+            switchChangeFees(choice);
+        }
+    }
+
+    public static void switchChangeFees(int choice){
+        switch (choice) {
+            case 1:
+                Parametr.setCardToFee(simpleLong("card to card fee"));
+                break;
+            case 2:
+                Parametr.setPolFee(simpleLong("pol fee"));
+                break;
+            case 3:
+                Parametr.setPayaFee(simpleLong("paya fee"));
+                break;
+            case 4:
+                Parametr.setFariToFee(simpleLong("fari to fari fee"));
+                break;
+            case 5:
+                Parametr.setSimChargeFee(simpleLong("phone charge fee"));
+                break;
+            default:
+                Print.erorr("invalid choice");
+                break;
+        }
+    }
+
+    public static long simpleLong(String text) {
+        String temp;
+        while (true) {
+            //Input.printBottom();
+            Print.input("enter "+text+" :");
+            temp = syInput.nextLine();
+            if (Input.checkLine(temp) == Command.BACK) {
+                return -1;
+            } else if (!Input.isNumber(temp) ) {
+                Print.erorr("invalid number");
+            } else {
+                return Long.parseLong(temp);
+            }
+        }
+    }
+
+    public static void changeProfit(){
+        int choice = 0;
+        while (true) {
+            Print.menu("proft="+Parametr.getProfit()+"\n1.change");
+            choice = UserInput.simpleMenu();
+            if (choice == -1) {
+                return;
+            } else if (choice==1) {
+                Parametr.setProfit(simpleLong("profit"));
+            }else {
+                Print.erorr("invalid number");
+            }
+        }
+    }
+
+    public static void autoTransaction() {
+        int choice = 0;
+        while (true) {
+            Print.menu("1.transfers\n2.boxes");
+            choice = UserInput.simpleMenu();
+            if (choice == -1) {
+                return;
+            }
+            switch (choice) {
+                case 1:
+                    autoTransfer();
+                    break;
+                case 2:
+                    autoBox();
+                    break;
+                default:
+                    Print.erorr("invalid choice");
+                    break;
+            }
+
+        }
+    }
+
+    public static void autoTransfer(){
+        int counter=0;
+        for (Transfer transfer:DataBase.getPendingTransfer()){
+            transfer.setTransferStatus(TransferStatus.COMPLETED);
+            counter++;
+        }
+        DataBase.getPendingTransfer().clear();
+        Print.info("completed "+counter+" transfers");
+
+    }
+
+    public static void autoBox(){
+        Instant nowTime= Calendar.now();
+        int counter=0;
+        for (int i = 0; i <DataBase.getRewardBoxes().size(); i++) {
+            if(nowTime.isAfter(DataBase.getRewardBoxes().get(i).getDate())){
+                DataBase.getRewardBoxes().get(i).payProfit();
+                DataBase.getRewardBoxes().remove(i);
+                i--;
+                counter++;
+            }
+        }
+        Print.info("payed "+counter+" profits");
+    }
+
+
 }

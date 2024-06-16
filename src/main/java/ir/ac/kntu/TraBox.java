@@ -1,7 +1,7 @@
 package ir.ac.kntu;
 
 enum BoxAction {
-    DEPOSIT, WITHDRAW;
+    DEPOSIT, WITHDRAW,PROFIT;
 }
 
 public class TraBox extends Transaction {

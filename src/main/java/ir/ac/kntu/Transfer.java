@@ -118,4 +118,9 @@ public class Transfer extends Transaction{
                 "\ndate: "+getDate()+" nav id: "+getNavId();
 
     }
+
+    @Override
+    public  String summery(){
+        return getType()+"   value: "+getValue()+"  nav id: "+getNavId()+" date: "+getDate()+"  "+transferStatus;
+    }
 }

@@ -166,6 +166,12 @@ public class Account {
         transactions.add(navId);
     }
 
+    public void profitBox(Long amount){
+        balance += amount;
+        Long navId = DataBase.addTransaction(new TraBox(amount, accountNumber, BoxAction.PROFIT));
+        transactions.add(navId);
+    }
+
     public void deposit(Box box, long amount) {
         if (box == null) {
             return;

@@ -6,6 +6,7 @@ public class DataBase {
     private static List<Account> accounts = new ArrayList<>();
     private static List<Support> supports = new ArrayList<>();
     private static List<Admin> admins=new ArrayList<>();
+    private static List<Transfer> pendingTransfer=new LinkedList<>();
     private static Map<Long, Transaction> transactions = new HashMap<>();
     private static List<VerificationRequest> verifyRequests = new LinkedList<>();
     private static Map<Long, SupportRequest> supportRequests = new HashMap<>();
@@ -149,6 +150,9 @@ public class DataBase {
     public static long addTransfer(long amount, long fromAccount, long toAccount,TransferType transferType) {
         Transfer transfer = new Transfer(amount, fromAccount, toAccount,transferType);
         transactions.put(transfer.getNavId(), transfer);
+        if(transferType==TransferType.PAYA){
+            pendingTransfer.add(0,transfer);
+        }
         return transfer.getNavId();
     }
 
@@ -253,5 +257,13 @@ public class DataBase {
 
     public static void setAdmins(List<Admin> admins) {
         DataBase.admins = admins;
+    }
+
+    public static List<Transfer> getPendingTransfer() {
+        return pendingTransfer;
+    }
+
+    public static void setPendingTransfer(List<Transfer> pendingTransfer) {
+        DataBase.pendingTransfer = pendingTransfer;
     }
 }

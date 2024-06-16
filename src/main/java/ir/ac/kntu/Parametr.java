@@ -10,12 +10,16 @@ public class Parametr {
     private static long payaFee=300L;
     private static long fariToFee=0L;
     private static long simChargeFee=10L;
+    private static long profit=1L;
 
     public static long getCardToMax() {
         return cardToMax;
     }
 
     public static void setCardToMax(long cardToMax) {
+        if(cardToMax==-1){
+            return;
+        }
         Parametr.cardToMax = cardToMax;
     }
 
@@ -24,6 +28,9 @@ public class Parametr {
     }
 
     public static void setPolMax(long polMax) {
+        if(polMax==-1){
+            return;
+        }
         Parametr.polMax = polMax;
     }
 
@@ -32,6 +39,9 @@ public class Parametr {
     }
 
     public static void setPayaMax(long payaMax) {
+        if(payaMax==-1){
+            return;
+        }
         Parametr.payaMax = payaMax;
     }
 
@@ -40,6 +50,9 @@ public class Parametr {
     }
 
     public static void setFariToMax(long feriToMax) {
+        if(feriToMax==-1){
+            return;
+        }
         Parametr.fariToMax = feriToMax;
     }
 
@@ -48,6 +61,9 @@ public class Parametr {
     }
 
     public static void setCardToFee(long cardToFee) {
+        if(cardToFee==-1){
+            return;
+        }
         Parametr.cardToFee = cardToFee;
     }
 
@@ -56,6 +72,9 @@ public class Parametr {
     }
 
     public static void setPolFee(long polFee) {
+        if(polFee==-1){
+            return;
+        }
         Parametr.polFee = polFee;
     }
 
@@ -64,6 +83,9 @@ public class Parametr {
     }
 
     public static void setPayaFee(long payaFee) {
+        if(payaFee==-1){
+            return;
+        }
         Parametr.payaFee = payaFee;
     }
 
@@ -72,6 +94,9 @@ public class Parametr {
     }
 
     public static void setFariToFee(long fariToFee) {
+        if(fariToFee==-1){
+            return;
+        }
         Parametr.fariToFee = fariToFee;
     }
 
@@ -80,6 +105,20 @@ public class Parametr {
     }
 
     public static void setSimChargeFee(long simChargeFee) {
+        if(simChargeFee==-1){
+            return;
+        }
         Parametr.simChargeFee = simChargeFee;
+    }
+
+    public static long getProfit() {
+        return profit;
+    }
+
+    public static void setProfit(long profit) {
+        if(profit==-1){
+            return;
+        }
+        Parametr.profit = profit;
     }
 }

@@ -16,7 +16,10 @@ public class RewardBox extends Box{
         setDate(days);
     }
 
-
+    public void payProfit(){
+        profeted=true;
+        account.profitBox((days*Parametr.getProfit()*getBalance())/(30*100));
+    }
 
     public Instant getDate() {
         return date;
